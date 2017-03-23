@@ -2,7 +2,7 @@
 //CONFIG ECOLE 42
 return (include __DIR__ . '/parameters.php') + [
         'routes' => [
-            '/web/'       => ['controller' => 'page', 'action'     => 'home'],
+            '/web/'           => ['controller' => 'page', 'action'     => 'home'],
             '/web/login'      => ['controller' => 'security', 'action' => 'login'],
             '/web/logout'     => ['controller' => 'security', 'action' => 'logout'],
             '/web/*'          => ['controller' => 'page', 'action'     => 'notFound'],

@@ -17,6 +17,7 @@ header {
 }
 
 .content {
+    font-family: "Lato", sans-serif;
     position: relative;
     left: 20%;
     top: 5%;

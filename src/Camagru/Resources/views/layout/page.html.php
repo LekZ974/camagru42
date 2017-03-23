@@ -13,10 +13,10 @@
         <div class="bar3"></div>
     </div>
     <div id="menu" class="sidenav">
-        <a href="/web">Accueil</a>
-        <a href="/web/login">Connexion</a>
+        <a href="/">Accueil</a>
+        <a href="/login">Connexion</a>
         <a href="#">Galerie</a>
-        <a href="/web/appCamagru">Camagru</a>
+        <a href="/appCamagru">Camagru</a>
     </div>
     <a href="#"><div id="buttonConnect" class="containerConnect" onclick="buttonChange(this)">
             <div class="b1"></div>
