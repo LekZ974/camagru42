@@ -1,0 +1,253 @@
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+header {
+    font-family: "Lato", sans-serif;
+}
+
+#footer{
+    position: fixed;
+    bottom: 0.5em;
+    background-color: #d8861c;
+    width: 100%;
+    text-align: right;
+}
+
+.content {
+    position: relative;
+    left: 20%;
+    top: 5%;
+}
+
+/*authentification*/
+
+#connexion {
+    position: fixed;
+    display: flex;
+    top: 20%;
+    left: 40%;
+}
+
+.nouveau {
+    background-color: #d8861c;
+    font-size: 3em;
+}
+
+.login {
+    background-color: limegreen;
+    font-size: 3em;
+}
+
+/*bouton menu*/
+.containerMenu {
+    position: fixed;
+    top:1em;
+    left:1em;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
+}
+
+/*bouton connect*/
+
+.containerConnect {
+    position: fixed;
+    top:1em;
+    right:1em;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.b1, .b2, .b3, .b4 {
+    width: 35px;
+    height: 5px;
+    background-color: limegreen;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .b1 {
+    -webkit-transform: rotate(90deg) translate(-9px, 6px) ;
+    transform: rotate(90deg) translate(15px, 15px) ;
+    background-color: #f44336;
+}
+
+.change .b2 {
+    transform: translate(0px, -15px) ;
+    background-color: #f44336;
+}
+
+.change .b3 {
+    -webkit-transform: rotate(90deg) translate(-8px, -8px) ;
+    transform: rotate(90deg) translate(-8px, -15px) ;
+    background-color: #f44336;
+}
+
+.change .b4 {
+    background-color: #f44336;
+}
+
+
+/*menu de coté*/
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #d8861c;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 4em;
+}
+
+.sidenav a {
+    padding: 0.5em 0.5em 0.5em 2em;
+    text-decoration: none;
+    font-size: 1.5em;
+    color: #333;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+@media screen and (max-height: 30em) {
+    .sidenav {padding-top: 1em}
+    .sidenav a {font-size: 1.1em}
+}
+
+/*Box*/
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+/*boutons*/
+
+button {
+    background-color: limegreen;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+button:hover span {
+    padding-right: 25px;
+}
+
+button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+/*WEBCAM*/
+
+.camagru {
+    position: absolute;
+    margin-left: 50%;
+    margin-top: 10%;
+    transform: translateX(-50%);
+}
+
+video {
+    width: 307px;
+    height: 250px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid #ccc;
+}
+
+.camagru button {
+    position: relative;
+    width: 8em;
+    border-radius: 1em;
+}
+
+.grayscale {
+    -webkit-filter: grayscale(1);
+}
+
+.sepia {
+    -webkit-filter: sepia(1);
+}
+
+.blur {
+    -webkit-filter: blur(3px);
+}
+
+.brightness {
+    -webkit-filter: brightness(5);
+}
+
+.contrast {
+    -webkit-filter: contrast(5);
+}
+
+.hue-rotate {
+    -webkit-filter: hue-rotate(90deg);
+}
+
+.hue-rotate2 {
+    -webkit-filter: hue-rotate(180deg);
+}
+
+.hue-rotate3 {
+    -webkit-filter: hue-rotate(360deg);
+}
+
+.saturate {
+    -webkit-filter: saturate(10%);
+}
+
+.invert {
+    -webkit-filter: invert(75%);
+}
