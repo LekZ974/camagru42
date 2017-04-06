@@ -26,6 +26,9 @@ include __DIR__.'/database.php';
 
 try{
     echo '- START -'.PHP_EOL;
+    print_r("user=".$DB_USER.PHP_EOL);
+    print_r("password=".$DB_PASSWORD.PHP_EOL);
+    print_r("tab=".$DB_TAB.PHP_EOL);
     $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ERRMODE_WARNING | ERRMODE_EXCEPTION | ERRMODE_SILENT
@@ -35,9 +38,9 @@ try{
     echo '- Create tables -'.PHP_EOL;
     $pdo->query("CREATE TABLE users ( 
     id               INTEGER               PRIMARY KEY AUTOINCREMENT,
-    username         VARCHAR( 255 )        NOT NULL,
+    login            VARCHAR( 255 )        NOT NULL,
     email            VARCHAR( 255 )        NOT NULL,
-    password         VARCHAR( 255 )        NOT NULL,
+    password         VARCHAR( 512 )        NOT NULL,
     token            VARCHAR( 255 )        NOT NULL,
     verified         BOOLEAN               NOT NULL,
     created          DATETIME              NOT NULL
@@ -53,6 +56,7 @@ try{
     print_r($pdo);
     if ($pdo)
     {
+        $pdo->query($DB_TAB);
         echo "Database : ".$DB_NAME." created".PHP_EOL;
     }
     else

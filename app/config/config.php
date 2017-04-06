@@ -13,11 +13,12 @@
 //CONFIG MAISON
 return (include __DIR__ . '/parameters.php') + [
         'routes' => [
-            '/'       => ['controller' => 'page', 'action' => 'home'],
-            '/login'  => ['controller' => 'security', 'action' => 'login'],
-            '/logout' => ['controller' => 'security', 'action' => 'logout'],
-            '*'       => ['controller' => 'page', 'action' => 'notFound'],
-            '/appCamagru' => ['controller' => 'camagru', 'action'  => 'appCamagru']
+            '/'                     => ['controller' => 'page', 'action' => 'home'],
+            '/login'                => ['controller' => 'security', 'action' => 'login'],
+            '/login/checkAccount'   => ['controller' => 'security', 'action' => 'checkAccount'],
+            '/logout'               => ['controller' => 'security', 'action' => 'logout'],
+            '/Galerie'              => ['controller' => 'page', 'action' => 'notFound'],
+            '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru']
 
         ],
     ];

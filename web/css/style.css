@@ -127,6 +127,15 @@ header {
     padding-top: 4em;
 }
 
+.sidenav span {
+    font-size: 1em;
+    color: #f1f1f1;
+    background-color: limegreen;
+    display: block;
+    text-align: center;
+    transition: 0.3s
+}
+
 .sidenav a {
     padding: 0.5em 0.5em 0.5em 2em;
     text-decoration: none;
@@ -251,4 +260,24 @@ video {
 
 .invert {
     -webkit-filter: invert(75%);
+}
+
+
+/*ALERT BOX*/
+
+#alert-page {
+    position: fixed;
+    display: flex;
+    top: 20%;
+    left: 40%;
+}
+
+.alert {
+    position: relative;
+    top: 8em;
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    padding: 2em;
+    border: 1px solid #888;
+    width: 20%; /* Could be more or less, depending on screen size */
 }

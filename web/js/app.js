@@ -29,6 +29,11 @@ function buttonChange(div) {
     }
 }
 
+// var logout = document.getElementById('buttonConnect');
+// if (){
+//
+// }
+
 // Get the modal
 var modal = document.getElementById('create');
 
@@ -38,3 +43,5 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 };
+
+

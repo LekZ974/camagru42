@@ -3,6 +3,7 @@
 namespace Camagru\Controller\Base;
 
 use Camagru\Response;
+use Camagru\Database;
 
 abstract class AbstractController
 {
@@ -15,6 +16,7 @@ abstract class AbstractController
     protected function renderView($view, array $params = [])
     {
         $date = new \DateTime();
+        $identity = $_SESSION['user'];
         ob_start();
         extract($params);
         include sprintf('%s/../../Resources/views/%s', __DIR__, $view);

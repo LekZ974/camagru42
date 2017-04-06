@@ -1,9 +1,9 @@
-<!--enlever path /web/ quand a lexterieur de lecole-->
+<!--enlever path / quand a lexterieur de lecole-->
 <html>
 <head>
-    <link rel="stylesheet" href="/web/css/style.css" />
-    <link rel="stylesheet" href="/web/css/form.css" />
-    <script src="/web/js/app.js" type="text/javascript" charset="UTF-8"></script>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/form.css" />
+    <script src="/js/app.js" type="text/javascript" charset="UTF-8"></script>
 </head>
 <body>
 <header>
@@ -13,12 +13,13 @@
         <div class="bar3"></div>
     </div>
     <div id="menu" class="sidenav">
+        <span><?= $identity ?></span>
         <a href="/">Accueil</a>
         <a href="/login">Connexion</a>
-        <a href="#">Galerie</a>
-        <a href="/appCamagru">Camagru</a>
+        <a href="/galerie">Galerie</a>
+        <a href="/Camagru">Camagru</a>
     </div>
-    <a href="#"><div id="buttonConnect" class="containerConnect" onclick="buttonChange(this)">
+    <a href="/logout"><div id="buttonConnect" class="containerConnect" onclick="buttonChange(this)">
             <div class="b1"></div>
             <div class="b2"></div>
             <div class="b3"></div>
