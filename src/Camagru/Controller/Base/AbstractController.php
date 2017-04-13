@@ -16,7 +16,6 @@ abstract class AbstractController
     protected function renderView($view, array $params = [])
     {
         $date = new \DateTime();
-        $identity = $_SESSION['user'];
         ob_start();
         extract($params);
         include sprintf('%s/../../Resources/views/%s', __DIR__, $view);

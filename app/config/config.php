@@ -15,8 +15,9 @@ return (include __DIR__ . '/parameters.php') + [
         'routes' => [
             '/'                     => ['controller' => 'page', 'action' => 'home'],
             '/login'                => ['controller' => 'security', 'action' => 'login'],
-            '/login/checkAccount'   => ['controller' => 'security', 'action' => 'checkAccount'],
+            '/activate'             => ['controller' => 'security', 'action' => 'activateAccount'],
             '/logout'               => ['controller' => 'security', 'action' => 'logout'],
+            '/forgot'               => ['controller' => 'security', 'action' => 'forgot'],
             '/Galerie'              => ['controller' => 'page', 'action' => 'notFound'],
             '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru']
 

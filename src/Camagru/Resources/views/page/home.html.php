@@ -4,4 +4,4 @@ $layout = 'layout/page.html.php';
 
 ?>
 <h1>Bienvenu sur CAMAGRU</h1>
-<p>@todo Home Page <?= $date->format('c') ?><?= $identity ?></p>
+<p>@todo Home Page <?= $date->format('c') ?><?= $_SESSION['user'] ?></p>

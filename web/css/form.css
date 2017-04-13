@@ -7,6 +7,18 @@
     width: 20%; /* Could be more or less, depending on screen size */
 }
 
+.form p {
+    padding: 0.7em;
+    text-align: center;
+}
+
+/* Forgot Modal */
+
+.forgotPassword {
+    position: absolute;
+    left: -400;
+    width: 100%;
+}
 
 /* Full-width input fields */
 input[type=text], input[type=password], input[type=email]{

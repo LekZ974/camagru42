@@ -1,16 +1,6 @@
 <?php
     $layout = 'layout/page.html.php';
-    header('Refresh:5; url=/');
-    if (isset($identity) && $identity != "Anon")
-    {
-        $message = "Bienvenu ".$identity." tu seras redirigé dans 5s";
-    }
-    else if ($_SESSION['connect'] == "")
-    {
-        $message = "Vous êtes déconnecté, à bientôt!";
-    }
-    else
-        $message = "Vous n'êtes pas enregistré / vous n'avez pas activé votre compte";
+    header('Refresh:2; url=/');
 ?>
 
 <html>
