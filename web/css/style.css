@@ -4,6 +4,15 @@
     box-sizing: border-box;
 }
 
+p {
+    font-size: 1em;
+}
+
+.warning p {
+    font-size: 0.8em;
+    color: #d8861c;
+}
+
 header {
     font-family: "Lato", sans-serif;
 }
@@ -16,11 +25,29 @@ header {
     text-align: right;
 }
 
-.content {
+body {
     font-family: "Lato", sans-serif;
     position: relative;
+    top: 10%;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
     left: 20%;
-    top: 5%;
+    right: 20%;
+}
+
+.image {
+    max-height: 20em;
+    height: 100%;
+    max-width: 60em;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
 }
 
 /*authentification*/
@@ -195,15 +222,15 @@ button:hover span:after {
 /*WEBCAM*/
 
 .camagru {
-    position: absolute;
-    margin-left: 50%;
+    position: relative;
+    left: 50%;
     margin-top: 10%;
     transform: translateX(-50%);
 }
 
 video {
-    width: 307px;
-    height: 250px;
+    width: 450px;
+    height: 350px;
     background: rgba(255,255,255,0.5);
     border: 1px solid #ccc;
 }
@@ -272,4 +299,138 @@ video {
     padding: 2em;
     border: 1px solid #888;
     width: 20%; /* Could be more or less, depending on screen size */
+}
+
+/*Gallery*/
+
+.row .column {
+    padding: 0 8px;
+}
+
+.column {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.column img {
+    max-height: 10em;
+    border-radius: 1em;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #d8861c;
+    margin: auto;
+    padding: 0;
+    max-height: 20em;
+    max-width: 30em;
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mySlides {
+    display: none;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 60%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: #d8861c;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.caption-container {
+    text-align: center;
+    background-color: black;
+    padding: 2px 16px;
+    color: white;
+}
+
+img.demo {
+    opacity: 0.6;
+    height: 4em;
+    position: relative;
+    padding: 1%;
+}
+
+.active,
+.demo:hover {
+    opacity: 1;
+}
+
+img.hover-shadow {
+    transition: 0.3s;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 0.7;
+}
+
+.mySlides img {
+    width: 100%;
+}
+
+.box-comments {
+    right: -20em;
+    top: 0;
+    position: absolute;
+    z-index: 1;
+    background-color: #fefefe;
+    width: 20em;
+    border-radius: 1em;
+    text-align: center;
+}
+
+.comments {
+    border-bottom-style: solid;
+    border-color: #d8861c;
+    text-align: left;
 }

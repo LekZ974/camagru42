@@ -6,10 +6,10 @@
         </div>
         <div class="containerForm">
             <h3>Login :</h3> <input type="text" name="createLogin" required>
-            <h3>Mail :</h3> <input type="email" id="mail" name="mail" required>
-            <h3>Confirmer mail :</h3> <input type="email" id="confirmMail" name="confirmMail" required onblur="checkForm()">
-            <h3>Mot de passe :</h3> <input type="password" id="createPassword" name="createPassword" required>
-            <h3>Confirmer mot de passe :</h3> <input type="password" id="confirmPassword" name="confirmPassword" required onblur="checkForm()">
+            <h3>Mail :</h3> <input type="email" id="mail" name="mail" required onchange="checkForm()">
+            <h3>Confirmer mail :</h3> <input type="email" id="confirmMail" name="confirmMail" required onchange="checkForm()">
+            <h3>Mot de passe :</h3> <input type="password" id="createPassword" name="createPassword" required onchange="checkForm()">
+            <h3>Confirmer mot de passe :</h3> <input type="password" id="confirmPassword" name="confirmPassword" required onchange="checkForm()">
             <div id="divcomp"></div>
             <button class="login" type="submit" id="createBtn" name="create" id="create"><span>Creer</span></button>
         </div>

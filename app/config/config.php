@@ -16,10 +16,14 @@ return (include __DIR__ . '/parameters.php') + [
             '/'                     => ['controller' => 'page', 'action' => 'home'],
             '/login'                => ['controller' => 'security', 'action' => 'login'],
             '/activate'             => ['controller' => 'security', 'action' => 'activateAccount'],
+            '/reset'                => ['controller' => 'security', 'action' => 'resetPassword'],
             '/logout'               => ['controller' => 'security', 'action' => 'logout'],
             '/forgot'               => ['controller' => 'security', 'action' => 'forgot'],
-            '/Galerie'              => ['controller' => 'page', 'action' => 'notFound'],
-            '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru']
+            '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru'],
+            '/gallery'              => ['controller' => 'camagru', 'action' => 'gallery'],
+            '/save'                 => ['controller' => 'camagru', 'action' => 'save'],
+            '/comments'             => ['controller' => 'camagru', 'action' => 'comments'],
+            '*'                     => ['controller' => 'page', 'action' => 'notFound'],
 
         ],
     ];
