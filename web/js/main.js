@@ -70,14 +70,12 @@ function closeModal() {
     document.getElementById('myModal').style.display = "none";
 }
 
-var slideIndex = 1;
-showSlides(slideIndex);
-
 function plusSlides(n) {
     showSlides(slideIndex += n);
 }
 
 function currentSlide(n) {
+    console.log(n);
     showSlides(slideIndex = n);
 }
 

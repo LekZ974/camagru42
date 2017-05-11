@@ -37,7 +37,6 @@ try{
     );");
     $pdo->query("CREATE TABLE comments (
     pic_id           INTEGER               ,
-    user_id          INTEGER               ,
     login            VARCHAR(255)          NOT NULL,
     comments         TEXT                  NOT NULL,
     post_at          DATETIME              NOT NULL

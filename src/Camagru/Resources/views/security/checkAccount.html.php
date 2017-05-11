@@ -7,7 +7,7 @@
 <body>
 <div id="alert-page">
         <div id="alert-check" class="modal">
-            <span class="alert animate"><?= $message ?></span>
+            <span class="alert animate"><?= $statement ?></span>
         </div>
 </div>
 </body>

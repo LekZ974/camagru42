@@ -22,6 +22,7 @@ return (include __DIR__ . '/parameters.php') + [
             '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru'],
             '/gallery'              => ['controller' => 'camagru', 'action' => 'gallery'],
             '/save'                 => ['controller' => 'camagru', 'action' => 'save'],
+            '/delete'               => ['controller' => 'camagru', 'action' => 'delete'],
             '/comments'             => ['controller' => 'camagru', 'action' => 'comments'],
             '*'                     => ['controller' => 'page', 'action' => 'notFound'],
 

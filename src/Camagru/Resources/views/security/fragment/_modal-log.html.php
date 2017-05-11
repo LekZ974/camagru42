@@ -9,7 +9,7 @@
             <label><b>Password</b></label>
             <input type="password" placeholder="Enter Password" name="password" required>
             <button type="submit"><span>Login</span></button>
-            <input type="checkbox" checked="checked"> Remember me
+            <input type="checkbox" checked="checked" name="rememberMe" id="remembercheckbox"><label for="remembercheckbox">Remember me
         </div>
         <div class="container" style="background-color:#f1f1f1">
             <button type="button" onclick="document.getElementById('auth').style.display='none'" class="cancelbtn"><span>Cancel</span></button>

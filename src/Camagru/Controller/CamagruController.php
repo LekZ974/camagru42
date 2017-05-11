@@ -14,7 +14,18 @@ class CamagruController extends Base\AbstractController
      */
     public function AppCamagruAction($request)
     {
-        return $this->render('camagru/appCamagru.html.php', ['_request' => $request]);
+        $username = $_SESSION['user'];
+        $db = new Database();
+        $query = $db->getPDO()->prepare("SELECT id, base64, owner, likes, comments FROM pictures WHERE owner = ? ORDER BY 1 ASC");
+        $query->execute(array($username));
+        $gallery = null;
+        $modal = null;
+        $row = $query->fetchAll();
+        foreach ($row as $picture)
+        {
+            file_put_contents($picture['id'].".png", base64_decode($picture['base64']));
+        }
+        return $this->render('camagru/appCamagru.html.php', ['_request' => $request, 'gallery' => $row]);
     }
     /**
      * @param array $request
@@ -24,7 +35,7 @@ class CamagruController extends Base\AbstractController
     public function galleryAction($request)
     {
         $db = new Database();
-        $sql = "SELECT id, base64, likes, comments FROM pictures ORDER BY 1 ASC";
+        $sql = "SELECT id, base64, likes, comments, created_at FROM pictures ORDER BY created_at ASC ";
         $query = $db->getPDO()->prepare($sql);
         $query->execute();
         $gallery = null;
@@ -34,9 +45,8 @@ class CamagruController extends Base\AbstractController
         {
             file_put_contents($picture['id'].".png", base64_decode($picture['base64']));
         }
-        return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row]);
+        return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row, "index" => 1]);
     }
-
     /**
      * @param array $request
      *
@@ -45,22 +55,93 @@ class CamagruController extends Base\AbstractController
     public function saveAction($request)
     {
         $username = $_SESSION['user'];
-        $photo = $_POST['pic'];
-        $img = preg_replace("%^data:image\/(?P<imgType>png|jpeg|jpg);base64,%i", '', $photo);
-        var_dump($photo);
+        $photo = $this->editingPhoto($request);
+        if (isset($photo, $username))
+        {
+
+            $db = new Database();
+            $stmt = $db->getPDO()->prepare("INSERT INTO pictures(owner, base64, likes, created_at) VALUES (:username, :photo, :likes, :times)");
+            $stmt->bindValue(':username', $username);
+            $stmt->bindValue(':photo', $photo);
+            $stmt->bindValue(':likes', 0);
+            $stmt->bindValue(':times', date('Y-m-d H:i:s'));
+            $stmt->execute();
+            $db = null;
+            header('Refresh:0; url=/Camagru');
+        }
+        else
+        {
+            $message = "Tu n'as pas à être ici!";
+            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+        }
+
+        return $this->render('camagru/appCamagru.html.php', ['request' => $request]);
+    }
+
+    public function editingPhoto($request)
+    {
+        $picture = $_POST['pic'];
+        $filter = $_POST['filt'];
+        $img = preg_replace("%^data:image\/(?P<imgType>png|jpeg|jpg);base64,%i", '', $picture);
         $img = str_replace(' ', '+', $img);
         $data = base64_decode($img);
         $file = uniqid() . '.png';
-        $db = new Database();
-        $stmt = $db->getPDO()->prepare("INSERT INTO pictures(owner, base64, likes, created_at) VALUES (:username, :photo, :likes, :times)");
-        $stmt->bindValue(':username', $username);
-        $stmt->bindValue(':photo', $img);
-        $stmt->bindValue(':likes', 0);
-        $stmt->bindValue(':times', date('Y-m-d H:i:s'));
-        $stmt->execute();
-        $db = null;
-        return $this->render('camagru/appCamagru.html.php', ['request' => $request]);
+        $sucess = file_put_contents($file, $data);
+        if ($sucess !== false)
+        {
+            print_r($filter);
+            print_r($_SERVER['HTTP_ORIGIN'].'/'.$file);
+            var_dump(gd_info());
+            exit();
+            $src = imagecreatefromstring(file_get_contents($filter));
+            $dest = imagecreatefromstring(file_get_contents($_SERVER['HTTP_ORIGIN'].'/'.$file));
+            if (imagecopy($dest, $src, 0, 0, 0, 0, imagesx($src), imagesy($src)))
+            {
+                return $file;
+            }
+        }
+        return false;
     }
+
+    /**
+     * @param array $request
+     *
+     * @return Response
+     */
+    public function deleteAction($request)
+    {
+        $db = new Database();
+        $photo = $_GET['id'];
+        $username = $_SESSION['user'];
+        $stmt = $db->getPDO()->prepare("SELECT id FROM pictures WHERE id = :photo AND owner = :username");
+        $stmt->bindValue(':username', $username);
+        $stmt->bindValue(':photo', $photo);
+        $stmt->execute();
+        $count = $stmt->fetch();
+        $message = "Tu n'as pas les droits sur cette photo : ".$photo."! Cliques <a href='/gallery'>ici</a> pour revenir à la gallerie!";
+        $status = false;
+        if ($count != null)
+        {
+            $message = "Es tu sûre de vouloir supprimer ta photo ".$photo."?";
+            $status = true;
+            if (isset($_POST['valid']))
+            {
+                $stmt = $db->getPDO()->prepare("DELETE FROM pictures WHERE id = :photo AND owner = :username");
+                $stmt->bindValue(':username', $username);
+                $stmt->bindValue(':photo', $photo);
+                $stmt->execute();
+                $db = null;
+                $message = "ta photo ".$photo."a bien été supprimée tu seras redirigé vers Camagru";
+                header('Refresh:2; url=/Camagru');
+            }
+            if (isset($_POST['cancel']))
+            {
+                header('Refresh:0; url=/Camagru');
+            }
+        }
+        return $this->render('camagru/delete.html.php', ['request' => $request, 'statement' => [$message, $status]]);
+    }
+
     /**
      * @param array $request
      *
@@ -104,9 +185,9 @@ class CamagruController extends Base\AbstractController
     public function likeAction($request)
     {
         $db = new Database();
-        if (isset($_GET['id'], $_GET['t']) && !empty($_GET['id']) && !empty($_GET['t']) && $_SESSION['user'])
+        $id = $_GET['id'];
+        if (isset($id, $_GET['t']) && !empty($id) && !empty($_GET['t']) && $_SESSION['user'])
         {
-            $id = $_GET['id'];
             $username = $_SESSION['user'];
             $stmt = $db->getPDO()->prepare("SELECT COUNT(id) FROM pictures WHERE id = :id");
             $stmt->bindValue(':id', $id);
@@ -127,21 +208,16 @@ class CamagruController extends Base\AbstractController
                     $add = $db->getPDO()->prepare('INSERT INTO likes (pic_id, login) VALUES (?, ?)');
                     $add->execute(array($id, $username));
                 }
-
-
             }
             else
             {
-                print_r($stmt->fetchAll());
-//                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => 'erreur fatale redirection vers l\'acceuil']);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => 'erreur fatale redirection vers l\'acceuil']);
             }
 
         }
         $likes = $db->getPDO()->prepare("SELECT COUNT(pic_id) FROM likes WHERE pic_id = ?");
         $likes->execute(array($id));
         $likes = $likes->fetch();
-        print_r($likes);
-        print_r($likes[0]);
         return $likes[0];
     }
     /**

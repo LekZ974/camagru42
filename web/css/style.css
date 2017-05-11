@@ -27,7 +27,6 @@ header {
 
 body {
     font-family: "Lato", sans-serif;
-    position: relative;
     top: 10%;
 }
 
@@ -37,6 +36,7 @@ body {
     position: absolute;
     left: 20%;
     right: 20%;
+    top: 5%;
 }
 
 .image {
@@ -219,20 +219,56 @@ button:hover span:after {
     right: 0;
 }
 
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+
 /*WEBCAM*/
 
 .camagru {
     position: relative;
     left: 50%;
-    margin-top: 10%;
+    margin-top: 5%;
     transform: translateX(-50%);
+}
+
+.photo {
+    display: inline-block;
+    margin-top: inherit;
+    position: relative;
+    width: 100%;
+}
+
+.photo-action {
+    display: block;
+}
+
+.photomaton{
+    position: relative;
+    float: right;
+}
+
+.photomaton #snap {
+    display: none;
+    max-height: 20em;
+    height: 100%;
+    max-width: 60em;
+}
+
+.photomaton #filterSelect {
+    position: absolute;
+    width: 10em;
+    top: 20px;
+    left: 10px;
 }
 
 video {
     width: 450px;
     height: 350px;
     background: rgba(255,255,255,0.5);
-    border: 1px solid #ccc;
+    border: 2px solid #ccc;
 }
 
 .camagru button {
@@ -281,6 +317,10 @@ video {
     -webkit-filter: invert(75%);
 }
 
+.none {
+    -webkit-filter: none;
+}
+
 
 /*ALERT BOX*/
 
@@ -301,7 +341,11 @@ video {
     width: 20%; /* Could be more or less, depending on screen size */
 }
 
-/*Gallery*/
+/*********************************Gallery******************************/
+
+.row {
+    width:100%;
+}
 
 .row .column {
     padding: 0 8px;
@@ -434,3 +478,19 @@ img.hover-shadow {
     border-color: #d8861c;
     text-align: left;
 }
+
+.my-gallery {
+    display: flex;
+    flex-direction: row;
+}
+
+/*Tools*/
+
+.tools {
+    float: left;
+}
+
+.tools img {
+    width: 5em;
+}
+

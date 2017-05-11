@@ -4,33 +4,19 @@ $layout = 'layout/page.html.php';
 
 ?>
 <html>
-<head>
-</head>
 <body>
+<div class="my-gallery">
+    <?php include __DIR__."/fragment/_pictures.html.php" ?>
+    <?php include __DIR__."/fragment/_modales.html.php" ?>
+</div>
 <div class="camagru">
-    <video id="video" autoplay></video>
-    <img class="image" id="img" src="">
-    <canvas style="display:none;"></canvas>
-    <br>
-    <input type="file" accept="image/png, image/jpg, image/jpeg" onchange="loadFile(event)">
-    <div class="warning">
-    <p>*only files png/jpg/jpeg</p>
-    </div>
-    <button onclick="changeFilter()">Filters</button>
-    <button onclick="snapshot()">Take Snapshot</button>
-    <button onclick="saveImg()">Save</button>
+    <?php include __DIR__."/fragment/_tools.html.php" ?>
+    <?php include __DIR__."/fragment/_photo.html.php" ?>
+</div>
 
+<div class="side-frame">
 </div>
 <script type="text/javascript" src="/js/cam.js"></script>
+
 </body>
 </html>
-<script>
-    var loadFile = function(event) {
-        var reader = new FileReader();
-        reader.onload = function(){
-            var output = document.getElementById('img');
-            output.src = reader.result;
-        };
-        reader.readAsDataURL(event.target.files[0]);
-    };
-</script>
