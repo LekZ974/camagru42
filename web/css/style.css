@@ -34,7 +34,7 @@ body {
     display: flex;
     flex-direction: column;
     position: absolute;
-    left: 20%;
+    left: 16%;
     right: 20%;
     top: 5%;
     width: 75%;
@@ -240,7 +240,7 @@ button:hover span:after {
     display: inline-block;
     margin-top: inherit;
     position: relative;
-    width: 100%;
+    width: 30em;
 }
 
 .photo-action {
@@ -250,12 +250,20 @@ button:hover span:after {
 .photomaton{
     position: relative;
     float: right;
+    top: 15px;
 }
 
 .photomaton #snap {
+    position: absolute;
     display: none;
     height: 20em;
     width: 20em;
+}
+
+.photomaton #cadre {
+    position: fixed;
+    width: 23em;
+    margin: -24px;
 }
 
 .photomaton #filterSelect {

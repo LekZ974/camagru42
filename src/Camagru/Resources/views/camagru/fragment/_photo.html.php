@@ -1,5 +1,6 @@
 <div class="photo">
     <div class="photomaton">
+        <img id="cadre" src="/image/Cadre-photo.jpg">
         <img id="snap">
         <img id="filterSelect">
     </div>
