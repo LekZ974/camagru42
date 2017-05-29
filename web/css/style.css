@@ -1,0 +1,509 @@
+* {
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+
+p {
+    font-size: 1em;
+}
+
+.warning p {
+    font-size: 0.8em;
+    color: #d8861c;
+}
+
+header {
+    font-family: "Lato", sans-serif;
+}
+
+#footer{
+    position: fixed;
+    bottom: 0.5em;
+    background-color: #d8861c;
+    width: 100%;
+    text-align: right;
+}
+
+body {
+    font-family: "Lato", sans-serif;
+    top: 10%;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    left: 20%;
+    right: 20%;
+    top: 5%;
+    width: 75%;
+    height: 90%;
+}
+
+.image {
+    max-height: 20em;
+    height: 100%;
+    max-width: 60em;
+}
+
+.container {
+    text-align: center;
+    width: 100%;
+}
+
+/*authentification*/
+
+#connexion {
+    position: fixed;
+    display: flex;
+    top: 20%;
+    left: 40%;
+}
+
+.nouveau {
+    background-color: #d8861c;
+    font-size: 3em;
+}
+
+.login {
+    background-color: limegreen;
+    font-size: 3em;
+}
+
+#createBtn{
+    display: none;
+}
+
+/*bouton menu*/
+.containerMenu {
+    position: fixed;
+    top:1em;
+    left:1em;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.bar1, .bar2, .bar3 {
+    width: 35px;
+    height: 5px;
+    background-color: #333;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.change .bar1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+.change .bar2 {opacity: 0;}
+
+.change .bar3 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
+}
+
+/*bouton connect*/
+
+.containerConnect {
+    position: fixed;
+    top:1em;
+    right:1em;
+    display: inline-block;
+    cursor: pointer;
+    z-index: 3;
+}
+
+.b1, .b2 {
+    width: 35px;
+    height: 5px;
+    background-color: red;
+    margin: 6px 0;
+    transition: 0.4s;
+}
+
+.b1 {
+    -webkit-transform: rotate(-45deg) translate(-9px, 6px) ;
+    transform: rotate(-45deg) translate(-9px, 6px) ;
+}
+
+.b2 {
+    -webkit-transform: rotate(45deg) translate(-8px, -8px) ;
+    transform: rotate(45deg) translate(-8px, -8px) ;
+}
+
+/*menu de coté*/
+.sidenav {
+    height: 100%;
+    width: 0;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    background-color: #d8861c;
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 4em;
+}
+
+.sidenav span {
+    font-size: 1em;
+    color: #f1f1f1;
+    background-color: limegreen;
+    display: block;
+    text-align: center;
+    transition: 0.3s
+}
+
+.sidenav a {
+    padding: 0.5em 0.5em 0.5em 2em;
+    text-decoration: none;
+    font-size: 1.5em;
+    color: #333;
+    display: block;
+    transition: 0.3s
+}
+
+.sidenav a:hover, .offcanvas a:focus{
+    color: #f1f1f1;
+}
+
+@media screen and (max-height: 30em) {
+    .sidenav {padding-top: 1em}
+    .sidenav a {font-size: 1.1em}
+}
+
+/*Box*/
+
+.box {
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+/*boutons*/
+
+button {
+    background-color: limegreen;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+}
+
+button span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    transition: 0.5s;
+}
+
+button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+button:hover span {
+    padding-right: 25px;
+}
+
+button:hover span:after {
+    opacity: 1;
+    right: 0;
+}
+
+.disabled {
+    pointer-events: none;
+    cursor: default;
+    opacity: 0.6;
+}
+
+/*WEBCAM*/
+
+.camagru {
+    position: relative;
+    left: 50%;
+    margin-top: 5%;
+    transform: translateX(-50%);
+}
+
+.photo {
+    display: inline-block;
+    margin-top: inherit;
+    position: relative;
+    width: 100%;
+}
+
+.photo-action {
+    display: block;
+}
+
+.photomaton{
+    position: relative;
+    float: right;
+}
+
+.photomaton #snap {
+    display: none;
+    height: 20em;
+    width: 20em;
+}
+
+.photomaton #filterSelect {
+    position: absolute;
+    width: 10em;
+    top: 20px;
+    left: 10px;
+}
+
+video {
+    width: 450px;
+    height: 350px;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid #ccc;
+}
+
+.camagru button {
+    position: relative;
+    width: 8em;
+    border-radius: 1em;
+}
+
+.grayscale {
+    -webkit-filter: grayscale(1);
+}
+
+.sepia {
+    -webkit-filter: sepia(1);
+}
+
+.blur {
+    -webkit-filter: blur(3px);
+}
+
+.brightness {
+    -webkit-filter: brightness(5);
+}
+
+.contrast {
+    -webkit-filter: contrast(5);
+}
+
+.hue-rotate {
+    -webkit-filter: hue-rotate(90deg);
+}
+
+.hue-rotate2 {
+    -webkit-filter: hue-rotate(180deg);
+}
+
+.hue-rotate3 {
+    -webkit-filter: hue-rotate(360deg);
+}
+
+.saturate {
+    -webkit-filter: saturate(10%);
+}
+
+.invert {
+    -webkit-filter: invert(75%);
+}
+
+.none {
+    -webkit-filter: none;
+}
+
+
+/*ALERT BOX*/
+
+#alert-page {
+    position: fixed;
+    display: flex;
+    top: 20%;
+    left: 40%;
+}
+
+.alert {
+    position: relative;
+    top: 8em;
+    background-color: #fefefe;
+    margin: 5% auto 15% auto; /* 5% from the top, 15% from the bottom and centered */
+    padding: 2em;
+    border: 1px solid #888;
+    width: 20%; /* Could be more or less, depending on screen size */
+}
+
+/*********************************Gallery******************************/
+
+.gallery {
+    width: 100%;
+    height: 100%;
+}
+
+.gallery .column img {
+    max-height: 30em;
+}
+
+.modal-content .column {
+    width: 7em;
+}
+
+.row {
+    width:100%;
+}
+
+.row .column {
+    padding: 0 8px;
+}
+
+.column {
+    float: left;
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+}
+
+.column img {
+    max-height: 10em;
+    border-radius: 1em;
+}
+
+.row:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+/* Modal Content */
+.modal-content {
+    position: relative;
+    background-color: #d8861c;
+    margin: auto;
+    padding: 0;
+    max-height: 20em;
+    max-width: 30em;
+}
+
+/* The Close Button */
+.close {
+    color: white;
+    position: absolute;
+    top: 10px;
+    right: 25px;
+    font-size: 35px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #999;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.mySlides {
+    display: none;
+}
+
+/* Next & previous buttons */
+.prev,
+.next {
+    cursor: pointer;
+    position: absolute;
+    top: 60%;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    color: #d8861c;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Position the "next button" to the right */
+.next {
+    right: 0;
+    border-radius: 3px 0 0 3px;
+}
+
+/* On hover, add a black background color with a little bit see-through */
+.prev:hover,
+.next:hover {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.caption-container {
+    text-align: center;
+    background-color: black;
+    padding: 2px 16px;
+    color: white;
+}
+
+img.demo {
+    opacity: 0.6;
+    height: 4em;
+    position: relative;
+    padding: 1%;
+}
+
+.active,
+.demo:hover {
+    opacity: 1;
+}
+
+img.hover-shadow {
+    transition: 0.3s;
+}
+
+.hover-shadow:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    opacity: 0.7;
+}
+
+.mySlides img {
+    width: 100%;
+}
+
+.box-comments {
+    right: -20em;
+    top: 0;
+    position: absolute;
+    z-index: 1;
+    background-color: #fefefe;
+    width: 20em;
+    border-radius: 1em;
+    text-align: center;
+}
+
+.comments {
+    border-bottom-style: solid;
+    border-color: #d8861c;
+    text-align: left;
+}
+
+.my-gallery {
+    display: flex;
+    flex-direction: row;
+}
+
+/*Tools*/
+
+.tools {
+    float: left;
+}
+
+.tools img {
+    width: 5em;
+}

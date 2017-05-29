@@ -1,0 +1,4 @@
+/.idea/
+/app/config/parameters.php
+/app/config/db_*
+/web/*.png

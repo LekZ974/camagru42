@@ -1,0 +1,4 @@
+<?php return [
+    'env' => 'local',
+    '$DB_NAME' => 'db_camagru',
+];
