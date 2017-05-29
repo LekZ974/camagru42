@@ -7,7 +7,8 @@ $layout = 'layout/page.html.php';
 <div id="alert-page">
     <div id="alert-check" class="modal">
         <span class="alert animate"><?= $statement[0] ?></span>
-        <?php if ($statement[1] === true){
+        <?php
+        if ($statement[1] === true){
             echo "
             <form method=\"post\">
             <button type=\"submit\" name=\"valid\">Yes</button>

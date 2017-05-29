@@ -48,17 +48,15 @@ class SecurityController extends Base\AbstractController
     {
         $db = new Database();
 //        check login
-        $stmt = $db->getPDO()->prepare('SELECT login FROM users WHERE login = :login');
-        $stmt->bindValue(':login', $login);
-        $stmt->execute();
+        $stmt = $db->getPDO()->prepare('SELECT login FROM users WHERE login = ?');
+        $stmt->execute([$login]);
         if ($stmt->fetchColumn() == $login)
         {
             return "l'identifiant ".$login." existe déjà";
         }
 //        check mail
-        $stmt = $db->getPDO()->prepare('SELECT email FROM users WHERE email = :mail');
-        $stmt->bindValue(':mail', $mail);
-        $stmt->execute();
+        $stmt = $db->getPDO()->prepare('SELECT email FROM users WHERE email = ?');
+        $stmt->execute([$mail]);
         if ($stmt->fetchColumn() == $mail)
         {
             return "l'email : ".$mail." existe déjà";
@@ -94,15 +92,12 @@ class SecurityController extends Base\AbstractController
     public function signInAction($login, $password)
     {
         $db = new Database();
-        $stmt = $db->getPDO()->prepare('SELECT login, password, verified FROM users WHERE login = :login and password = :password and verified = 1');
-        $stmt->bindValue(":login", $login);
-        print_r($stmt->fetchColumn());
-        $stmt->bindValue(":password", $password);
-        $stmt->execute();
+        $stmt = $db->getPDO()->prepare('SELECT login, password, verified FROM users WHERE login = ? and password = ? and verified = ?');
+        $stmt->execute([$login, $password, 1]);
         if ($stmt->fetchColumn() != null)
         {
             $_SESSION['user'] = $login;
-            $_SESSION['connect'] = "Connected";
+            $_SESSION['connect'] = "connected";
             return "Bienvenu ".$_SESSION['user']." tu seras redirigé dans un instant. Si ce n'est pas le cas cliques <a href='/'>ici</a>";
         }
         else
@@ -123,39 +118,52 @@ class SecurityController extends Base\AbstractController
         $subject = null;
         $message = null;
         $headers = null;
+        $queryString = 'log='.urlencode($login).'&key'.urlencode($token);
         if ($type == "activate")
         {
             $subject = 'Activation de ton compte Camagru';
-            $message = 'Bienvenue sur Camagru,' . "\r\n" . 'Pour activer ton compte, cliques sur le lien ci dessous ou copier/coller dans ton navigateur internet.'
-                . "\r\n" . "\r\n" . 'http://localhost:8080/activate?log=' . urlencode($login) . '&key=' . urlencode($token) . "\r\n" . "\r\n"
-                . '---------------' . "\r\n" . 'C\'est un mail automatique, donc pas besoin d\'y répondre.';
-            $message = wordwrap($message, 70, "\r\n");
-            $headers = 'From: ahoareau@student.42.fr' . "\r\n";
+            $message = <<<MAIL
+            <html>
+		<head>
+		<title>Bienvenue sur Camagru $login!!</title>
+		</head>
+		<body>
+			<br />
+			<p>Pour activer ton compte, cliques sur le lien ci dessous ou copier/coller dans ton navigateur internet.</p>
+			<a href="http://localhost:8080/activate?$queryString">Cliques ici pour activer ton compte.</a>
+			<br />
+			<p>---------------</p>
+			<p>C'est un mail automatique, Merci de ne pas y répondre.</p>
+		</body>
+		</html>
+MAIL;
+            $headers  = 'MIME-Version: 1.0' . "\r\n";
+            $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+            $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
         }
         elseif ($type = "reset")
         {
             $subject = 'Réinitialisation de ton mot de passe Camagru';
-            $message = '
+            $message = <<<MAIL
 		<html>
 		<head>
 		<title>Reinitialisation mot de passe</title>
 		</head>
 		<body>
-			<p>Bonjour ' . $login . ',</p>
+			<p>Bonjour $login,</p>
 			<br />
 			<p>Quelqu’un a récemment demandé à réinitialiser ton mot de passe Camagru.</p>
-			<a href="http://localhost:8080/Camagru/reset?log=' . urlencode($login) . '&key=' . urlencode($token) . '">Cliques ici pour changer ton mot de passe.</a>
+			<a href="http://localhost:8080/Camagru/reset?$queryString">Cliques ici pour changer ton mot de passe.</a>
 			<br />
 			<p>---------------</p>
-			<p>C\'est un mail automatique, Merci de ne pas y répondre.</p>
+			<p>C'est un mail automatique, Merci de ne pas y répondre.</p>
 		</body>
 		</html>
-		';
+MAIL;
             $headers  = 'MIME-Version: 1.0' . "\r\n";
             $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
             $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
         }
-
         mail($mail, $subject, $message, $headers);
     }
 

@@ -11,12 +11,26 @@
         <div class="bar2"></div>
         <div class="bar3"></div>
     </div>
+    <?php
+    $user = $_SESSION['user'];
+    if (!$_SESSION['connect'])
+    {
+        echo <<<MENU
     <div id="menu" class="sidenav">
-        <span id="targetSpanId"><?= $_SESSION['user'] ?></span>
         <a href="/">Accueil</a>
         <a href="/login">Connexion</a>
-        <a href="/gallery">Galerie</a>
+    </div>
+MENU;
+    }
+    else
+    {
+        echo <<<MENU
+    <div id="menu" class="sidenav">
+        <span id="targetSpanId">$user</span>
+        <a href="/">Accueil</a>
         <a href="/Camagru">Camagru</a>
+        <a href="/gallery">Galerie</a>
+        <a href="/logout">Déconnexion</a>
     </div>
     <a href="/logout">
         <div id="buttonConnect" class="containerConnect">
@@ -24,6 +38,9 @@
             <div class="b2"></div>
         </div>
     </a>
+MENU;
+    }
+    ?>
 </header>
 <div class="content">
     <?= $content ?>

@@ -6,6 +6,7 @@ $layout = 'layout/page.html.php';
 <html>
 <body>
 <div class="my-gallery">
+    <p>Tes derniers snap :</p>
     <?php include __DIR__."/fragment/_pictures.html.php" ?>
     <?php include __DIR__."/fragment/_modales.html.php" ?>
 </div>
