@@ -254,9 +254,8 @@ button:hover span:after {
 
 .photomaton #snap {
     display: none;
-    max-height: 20em;
-    height: 100%;
-    max-width: 60em;
+    height: 20em;
+    width: 20em;
 }
 
 .photomaton #filterSelect {

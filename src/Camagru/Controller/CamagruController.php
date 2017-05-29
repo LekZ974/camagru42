@@ -178,7 +178,7 @@ class CamagruController extends Base\AbstractController
             $filter = $this->getFilter($_POST['filt']);
             $src = imagecreatefromstring($filter['img']);
             $dest = imagecreatefromstring($img);
-            if (imagecopy($dest, $src, 0, 0, 0, 0, imagesx($src), imagesy($src)))
+            if (imagecopy($dest, $src, 30, 40, 0, 0, imagesx($src), imagesy($src)))
             {
                 imageAlphaBlending($dest, false);
                 imageSaveAlpha($dest, true);
