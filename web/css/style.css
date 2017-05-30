@@ -394,10 +394,9 @@ video {
 /* Modal Content */
 .modal-content {
     position: relative;
-    background-color: #d8861c;
+    background-color: #ffffff;
     margin: auto;
     padding: 0;
-    max-height: 20em;
     max-width: 30em;
 }
 
@@ -431,6 +430,28 @@ video {
     width: auto;
     padding: 16px;
     margin-top: -50px;
+    color: #d8861c;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.page-navigation {
+    position: absolute;
+    width: 100%;
+}
+
+.page-navigation .prev,
+.page-navigation .next {
+    cursor: pointer;
+    position: fixed;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    margin-right: 35em;
     color: #d8861c;
     font-weight: bold;
     font-size: 20px;

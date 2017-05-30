@@ -23,11 +23,8 @@ class CamagruController extends Base\AbstractController
             $gallery = null;
             $modal = null;
             $row = $query->fetchAll();
-            foreach ($row as $picture)
-            {
-                file_put_contents($picture['id'].".png", base64_decode($picture['base64']));
-            }
-            return $this->render('camagru/appCamagru.html.php', ['_request' => $request, 'gallery' => $row]);
+            $modalGallery = $this->miniGallery($request);
+            return $this->render('camagru/appCamagru.html.php', ['_request' => $request, 'gallery' => $row, 'modalGallery' => $modalGallery]);
         }
         else
         {
@@ -42,25 +39,26 @@ class CamagruController extends Base\AbstractController
      */
     public function galleryAction($request)
     {
-        $db = new Database();
-        $pages = $this->galleryPage($request);
-        if (isset($_GET['page']))
-        {
-            $page = $_GET['page'];
+        if (isset($_SESSION['user'], $_SESSION['connect']) && !empty($_SESSION['user'])) {
+            $db = new Database();
+            $pages = $this->galleryPageManage($request);
+            if (isset($_GET['page'])) {
+                $page = $_GET['page'];
+            } else {
+                $page = 1;
+            }
+            $pictureStart = ($page - 1) * $pages['nbPicturesPages'];
+            $query = $db->getPDO()->prepare("SELECT * FROM pictures ORDER BY created_at DESC LIMIT ?,?");
+            $query->execute([$pictureStart, $pages['nbPicturesPages']]);
+            $row = $query->fetchAll();
+            $modalGallery = $this->miniGallery($request);
+            return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row, 'pages' => $pages, 'modalGallery' => $modalGallery, 'index' => $pictureStart]);
         }
         else
         {
-            $page = 1;
+            $message = "Tu n'as pas à être ici!";
+            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
         }
-        $pictureStart = ($page - 1) * $pages['nbPicturesPages'];
-        $query = $db->getPDO()->prepare("SELECT * FROM pictures ORDER BY created_at DESC LIMIT ?,?");
-        $query->execute([$pictureStart, $pages['nbPicturesPages']]);
-        $row = $query->fetchAll();
-        foreach ($row as $picture)
-        {
-            file_put_contents($picture['id'].".png", base64_decode($picture['base64']));
-        }
-        return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row, 'pages' => $pages]);
     }
     /**
      * @param array $request
@@ -156,13 +154,46 @@ class CamagruController extends Base\AbstractController
         return $this->render('camagru/comments.html.php', ['_request' => $request, 'data' => $comments, 'image' => $image, 'likes' => $likes]);
     }
 
-    protected function galleryPage($request)
+    protected function galleryPageManage($request)
     {
         $db = new Database();
         $nbPicturesPage = 8;
         $query = $db->getPDO()->query('SELECT COUNT(*) AS total_pictures FROM pictures');
         $count = $query->fetch();
-        return ['nbPages' => ceil($count['total_pictures'] / $nbPicturesPage), 'nbPicturesPages' => $nbPicturesPage];
+        $nbPages = ceil($count['total_pictures'] / $nbPicturesPage);
+        $page = $_GET['page'];
+        switch ($page) {
+            case ($page === 0):
+                $pageNext = 2;
+                $pagePrev = 1;
+                break;
+            case ($page <= 1):
+                $pageNext = 2;
+                $pagePrev = 1;
+                break;
+            case ($page == $nbPages):
+                $pageNext = $nbPages;
+                $pagePrev = $nbPages - 1;
+                break;
+            default:
+                $pageNext = $page + 1;
+                $pagePrev = $page - 1;
+                break;
+        }
+        return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => $pageNext, 'pagePrev' => $pagePrev];
+    }
+
+    protected function miniGallery($request)
+    {
+        $db = new Database();
+        $query = $db->getPDO()->prepare("SELECT * FROM pictures ORDER BY created_at DESC");
+        $query->execute();
+        $row = $query->fetchAll();
+        foreach ($row as $picture)
+        {
+            file_put_contents($picture['id'].".png", base64_decode($picture['base64']));
+        }
+        return $row;
     }
 
     protected function editingPhoto($request)
