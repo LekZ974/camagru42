@@ -44,6 +44,13 @@ class SecurityController extends Base\AbstractController
             return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
         }
     }
+
+    /**
+     * @param $login
+     * @param $password
+     * @param $mail
+     * @return string
+     */
     public function signUpAction($login, $password, $mail)
     {
         $db = new Database();
@@ -107,6 +114,134 @@ class SecurityController extends Base\AbstractController
     }
 
     /**
+     * @param array $request
+     *
+     * @return Response
+     */
+    public function activateAccountAction($request)
+    {
+        $login = $_GET['log'];
+        $token = $_GET['key'];
+
+        $message = "lien d'activation non reconnu";
+        if (isset($login) && isset($token))
+        {
+            $db = new Database();
+            $stmt = $db->getPDO()->prepare('UPDATE users SET verified = 1 WHERE token = :token and verified = :verified');
+            $stmt->BindValue(':token', $token);
+            $stmt->BindValue(':verified', false);
+            $stmt->execute();
+            if ($stmt->rowCount() == 0)
+            {
+                $message = "Erreur : ton compte est déjà activé, si ce n'est pas le cas contactes l'administrateur";
+            }
+            else
+            {
+                $message = "ton compte est activé";
+            }
+        }
+        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+    }
+
+    /**
+     * @param array $request
+     *
+     * @return Response
+     */
+    public function logoutAction($request)
+    {
+        $message = "Connectes toi avant de te déconnecter!";
+        if ($_SESSION['connect'])
+        {
+            $_SESSION = [];
+            session_destroy();
+            setcookie('login',"");
+            setcookie('password',"");
+            $message = "C'est bon t'es déconnecté, à bientôt!";
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+        }
+        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+    }
+
+    /**
+     * @param $request
+     * @return Response
+     */
+    public function forgotAction($request)
+    {
+        if (!isset($_SESSION['connect']))
+        {
+            $login = $_POST['login'];
+            $mail = $_POST['mail'];
+            if (isset($login) && isset($mail))
+            {
+                $db = new Database();
+                $stmt = $db->getPDO()->prepare('SELECT login, email, token FROM users WHERE login = :login and email = :mail');
+                $stmt->bindValue(':login', $login);
+                $stmt->bindValue(':mail', $mail);
+                $stmt->execute();
+                $token = $stmt->fetchColumn(2);
+                if ($token != null)
+                {
+                    $this->sendMail($login, $mail, $token, "reset");
+                    $message = "Tu vas recevoir un email pour réinitialiser ton mot de passe";
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+                }
+                else
+                {
+                    $message = "Le nom d'utilisateur ou l'email ne sont pas enregistrés";
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+                }
+            }
+        }
+        else
+        {
+            $message = "Tu es déjà connecté ".$_SESSION['user']."!!";
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+        }
+        return $this->render('security/recup-password.html.php', ['_request' => $request]);
+    }
+
+    /**
+     * @param $request
+     * @return Response
+     */
+    public function resetPasswordAction($request)
+    {
+        $login = $_GET['log'];
+        $token = $_GET['key'];
+
+        if (isset($login) && isset($token))
+        {
+            $db = new Database();
+            $stmt = $db->getPDO()->prepare('SELECT login, token FROM users WHERE login = :login and token = :token');
+            $stmt->bindValue(':login', $login);
+            $stmt->bindValue(':token', $token);
+            $stmt->execute();
+            if ($stmt->fetchColumn() !== 0)
+            {
+                if (isset($_POST['newPassword']) && isset($_POST['confirmPassword']) && $_POST['newPassword'] == $_POST['confirmPassword'])
+                {
+                    $newPassword = hash('whirlpool', $_POST['newPassword']);
+                    $confirmPassword = hash('whirlpool', $_POST['confirmPassword']);
+                    $stmt = $db->getPDO()->prepare('UPDATE users SET password = :newPassword WHERE login = :login and token = :token');
+                    $stmt->bindValue(':token', $token);
+                    $stmt->bindValue(':login', $login);
+                    $stmt->bindValue(':newPassword', $newPassword);
+                    $stmt->execute();
+                    $message = "Ton mot de passe à été mis à jour";
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => $message]);
+                }
+            }
+            else
+            {
+                $message = "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin";
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+            }
+            return $this->render('security/reset-password.html.php', ['_request' => $request]);
+        }
+    }
+    /**
      * @param string $mail
      * @param string $login
      * @param string $token
@@ -165,126 +300,5 @@ MAIL;
             $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
         }
         mail($mail, $subject, $message, $headers);
-    }
-
-    /**
-     * @param array $request
-     *
-     * @return Response
-     */
-    public function activateAccountAction($request)
-    {
-        $login = $_GET['log'];
-        $token = $_GET['key'];
-
-        $message = "lien d'activation non reconnu";
-        if (isset($login) && isset($token))
-        {
-            $db = new Database();
-            $stmt = $db->getPDO()->prepare('UPDATE users SET verified = 1 WHERE token = :token and verified = :verified');
-            $stmt->BindValue(':token', $token);
-            $stmt->BindValue(':verified', false);
-            $stmt->execute();
-            if ($stmt->rowCount() == 0)
-            {
-                $message = "Erreur : ton compte est déjà activé, si ce n'est pas le cas contactes l'administrateur";
-            }
-            else
-            {
-                $message = "ton compte est activé";
-            }
-        }
-        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-    }
-
-    /**
-     * @param array $request
-     *
-     * @return Response
-     */
-    public function logoutAction($request)
-    {
-        $message = "Connectes toi avant de te déconnecter!";
-        if ($_SESSION['connect'])
-        {
-            $_SESSION = [];
-            session_destroy();
-            setcookie('login',"");
-            setcookie('password',"");
-            $message = "C'est bon t'es déconnecté, à bientôt!";
-            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-        }
-        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-    }
-
-    public function forgotAction($request)
-    {
-        if (!isset($_SESSION['connect']))
-        {
-            $login = $_POST['login'];
-            $mail = $_POST['mail'];
-            if (isset($login) && isset($mail))
-            {
-                $db = new Database();
-                $stmt = $db->getPDO()->prepare('SELECT login, email, token FROM users WHERE login = :login and email = :mail');
-                $stmt->bindValue(':login', $login);
-                $stmt->bindValue(':mail', $mail);
-                $stmt->execute();
-                $token = $stmt->fetchColumn(2);
-                if ($token != null)
-                {
-                    $this->sendMail($login, $mail, $token, "reset");
-                    $message = "Tu vas recevoir un email pour réinitialiser ton mot de passe";
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-                }
-                else
-                {
-                    $message = "Le nom d'utilisateur ou l'email ne sont pas enregistrés";
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-                }
-            }
-        }
-        else
-        {
-            $message = "Tu es déjà connecté ".$_SESSION['user']."!!";
-            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-        }
-        return $this->render('security/recup-password.html.php', ['_request' => $request]);
-    }
-
-    public function resetPasswordAction($request)
-    {
-        $login = $_GET['log'];
-        $token = $_GET['key'];
-
-        if (isset($login) && isset($token))
-        {
-            $db = new Database();
-            $stmt = $db->getPDO()->prepare('SELECT login, token FROM users WHERE login = :login and token = :token');
-            $stmt->bindValue(':login', $login);
-            $stmt->bindValue(':token', $token);
-            $stmt->execute();
-            if ($stmt->fetchColumn() !== 0)
-            {
-                if (isset($_POST['newPassword']) && isset($_POST['confirmPassword']) && $_POST['newPassword'] == $_POST['confirmPassword'])
-                {
-                    $newPassword = hash('whirlpool', $_POST['newPassword']);
-                    $confirmPassword = hash('whirlpool', $_POST['confirmPassword']);
-                    $stmt = $db->getPDO()->prepare('UPDATE users SET password = :newPassword WHERE login = :login and token = :token');
-                    $stmt->bindValue(':token', $token);
-                    $stmt->bindValue(':login', $login);
-                    $stmt->bindValue(':newPassword', $newPassword);
-                    $stmt->execute();
-                    $message = "Ton mot de passe à été mis à jour";
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => $message]);
-                }
-            }
-            else
-            {
-                $message = "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin";
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
-            }
-            return $this->render('security/reset-password.html.php', ['_request' => $request]);
-        }
     }
 }

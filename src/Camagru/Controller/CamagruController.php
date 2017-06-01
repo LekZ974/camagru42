@@ -177,6 +177,11 @@ class CamagruController extends Base\AbstractController
 
     }
 
+    /**
+     * @param $request
+     * @param null $user
+     * @return array
+     */
     protected function galleryPageManage($request, $user = null)
     {
         $db = new Database();
@@ -217,6 +222,10 @@ class CamagruController extends Base\AbstractController
         return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => $pageNext, 'pagePrev' => $pagePrev];
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     protected function getAllPictures($request)
     {
         $db = new Database();
@@ -247,6 +256,10 @@ class CamagruController extends Base\AbstractController
         return ['pictures' => $query->fetchAll(), 'pages' => $pages, 'index' => $pictureStart];
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     protected function getAllUserPictures($request)
     {
         $db = new Database();
@@ -261,6 +274,10 @@ class CamagruController extends Base\AbstractController
         return $row;
     }
 
+    /**
+     * @param $request
+     * @return array
+     */
     protected function getPageUserPictures($request)
     {
         $db = new Database();
@@ -277,6 +294,10 @@ class CamagruController extends Base\AbstractController
         return ['pictures' => $query->fetchAll(), 'pages' => $pages, 'index' => $pictureStart];
     }
 
+    /**
+     * @param $request
+     * @return bool|string
+     */
     protected function editingPhoto($request)
     {
         $img = preg_replace("%^data:image\/(?P<imgType>png|jpeg|jpg);base64,%i", '', $_POST['pic']);
@@ -311,6 +332,10 @@ class CamagruController extends Base\AbstractController
         return false;
     }
 
+    /**
+     * @param $request
+     * @return Response
+     */
     protected function likeAction($request)
     {
         $db = new Database();
@@ -350,6 +375,10 @@ class CamagruController extends Base\AbstractController
         return $likes[0];
     }
 
+    /**
+     * @param $pathFilter
+     * @return array|bool
+     */
     protected function getFilter($pathFilter)
     {
         $tab = explode('/', $pathFilter);
@@ -393,6 +422,12 @@ class CamagruController extends Base\AbstractController
         return ['img' => $img, 'filterName' => $filter];
     }
 
+    /**
+     * @param $file
+     * @param $newWidth
+     * @param $newHeight
+     * @return string
+     */
     protected function reSize($file, $newWidth, $newHeight)
     {
         $tab = explode('/', $file);
