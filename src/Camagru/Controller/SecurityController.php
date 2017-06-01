@@ -26,7 +26,7 @@ class SecurityController extends Base\AbstractController
                     setcookie('password', $password, time()+365*24*3600, null, null, false, true);
                 }
                 $message = $this->signInAction($login, $password);
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
             }
             if (isset($_POST['createLogin']) && isset($_POST['createPassword']) && isset($_POST['mail']))
             {
@@ -34,9 +34,9 @@ class SecurityController extends Base\AbstractController
                 $password = hash('whirlpool', $_POST['createPassword']);
                 $mail = htmlspecialchars($_POST['mail']);
                 $message = $this->signUpAction($login, $password, $mail);
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
             }
-                return $this->render('security/login.html.php', ['login']);
+                return $this->render('security/login.html.php', ['_request' => $request]);
         }
         else
         {
