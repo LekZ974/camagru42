@@ -25,7 +25,6 @@ return (include __DIR__ . '/parameters.php') + [
             '/save'                 => ['controller' => 'camagru', 'action' => 'save'],
             '/delete'               => ['controller' => 'camagru', 'action' => 'delete'],
             '/comments'             => ['controller' => 'camagru', 'action' => 'comments'],
-            '*'                     => ['controller' => 'page', 'action' => 'notFound'],
-
+            '/*'                     => ['controller' => 'page', 'action' => 'notFound'],
         ],
     ];

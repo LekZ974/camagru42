@@ -13,9 +13,6 @@ class Database
 //A faire plus propre!!
     /**
      * Database constructor.
-     * @param $_DB_DSN
-     * @param $_DB_USER
-     * @param $_DB_PASSWORD
      */
     public function __construct()
     {
@@ -32,10 +29,11 @@ class Database
     }
     /**
      * @param string $_DB_DSN
+     * @return $this
      */
-    public function setDSN($DB_DSN)
+    public function setDSN($_DB_DSN)
     {
-        $this->_DB_DSN = $DB_DSN;
+        $this->_DB_DSN = $_DB_DSN;
         return $this;
     }
     /**
@@ -47,10 +45,11 @@ class Database
     }
     /**
      * @param string $_DB_USER
+     * @return $this
      */
-    public function setUSER($DB_USER)
+    public function setUSER($_DB_USER)
     {
-        $this->_DB_USER = $DB_USER;
+        $this->_DB_USER = $_DB_USER;
         return $this;
     }
     /**
@@ -62,10 +61,11 @@ class Database
     }
     /**
      * @param string $_DB_PASSWORD
+     * @return $this
      */
-    public function setPASSWORD($DB_PASSWORD)
+    public function setPASSWORD($_DB_PASSWORD)
     {
-        $this->_DB_PASSWORD = $DB_PASSWORD;
+        $this->_DB_PASSWORD = $_DB_PASSWORD;
         return $this;
     }
 

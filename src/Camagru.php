@@ -19,7 +19,6 @@ class Camagru
             $route = $config['routes']['*'];
         }
 
-
         $class = sprintf("Camagru\\Controller\\%sController", ucfirst($route['controller']));
         $method = sprintf('%sAction', $route['action']);
 

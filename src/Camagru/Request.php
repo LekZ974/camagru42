@@ -42,6 +42,8 @@ class Request
     }
     /**
      * @param string $uri
+     *
+     * @return $this
      */
     public function setUri($uri)
     {

@@ -24,7 +24,7 @@ class CamagruController extends Base\AbstractController
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
         }
     }
     /**
@@ -38,7 +38,7 @@ class CamagruController extends Base\AbstractController
             $row = $this->getPagePictures($request);
             if ($row['pictures'] == null)
             {
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Pas de photo à afficher!"]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Pas de photo à afficher!"]);
             }
             $modalGallery = $this->getAllPictures($request);
 
@@ -46,7 +46,7 @@ class CamagruController extends Base\AbstractController
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
         }
     }
     /**
@@ -60,7 +60,7 @@ class CamagruController extends Base\AbstractController
             $row = $this->getPageUserPictures($request);
             if ($row['pictures'] == null)
             {
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Pas de photo à afficher!"]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Pas de photo à afficher!"]);
             }
             $modalGallery = $this->getAllUserPictures($request);
 
@@ -68,7 +68,7 @@ class CamagruController extends Base\AbstractController
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
         }
     }
     /**
@@ -90,10 +90,10 @@ class CamagruController extends Base\AbstractController
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
         }
 
-        return $this->render('camagru/appCamagru.html.php', ['request' => $request]);
+        return $this->render('camagru/appCamagru.html.php', ['_request' => $request]);
     }
 
     /**
@@ -129,7 +129,7 @@ class CamagruController extends Base\AbstractController
             }
         }
 
-        return $this->render('camagru/delete.html.php', ['request' => $request, 'statement' => [$message, $status]]);
+        return $this->render('camagru/delete.html.php', ['_request' => $request, 'statement' => [$message, $status]]);
     }
 
     /**
@@ -172,7 +172,7 @@ class CamagruController extends Base\AbstractController
         {
             $message = "Tu n'as pas à être ici!";
 
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
         }
 
     }
