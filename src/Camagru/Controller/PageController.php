@@ -22,6 +22,6 @@ class PageController extends Base\AbstractController
      */
     public function notFoundAction($request)
     {
-        return $this->render('page/not-found.html.php');
+        return $this->render('page/not-found.html.php', ['_request' => $request]);
     }
 }

@@ -26,7 +26,7 @@ class SecurityController extends Base\AbstractController
                     setcookie('password', $password, time()+365*24*3600, null, null, false, true);
                 }
                 $message = $this->signInAction($login, $password);
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
             }
             if (isset($_POST['createLogin']) && isset($_POST['createPassword']) && isset($_POST['mail']))
             {
@@ -34,14 +34,14 @@ class SecurityController extends Base\AbstractController
                 $password = hash('whirlpool', $_POST['createPassword']);
                 $mail = htmlspecialchars($_POST['mail']);
                 $message = $this->signUpAction($login, $password, $mail);
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
             }
                 return $this->render('security/login.html.php', ['login']);
         }
         else
         {
             $message = "Tu es déjà connecté ".$_SESSION['user']."!!";
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
         }
     }
     public function signUpAction($login, $password, $mail)
@@ -194,7 +194,7 @@ MAIL;
                 $message = "ton compte est activé";
             }
         }
-        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
     }
 
     /**
@@ -212,9 +212,9 @@ MAIL;
             setcookie('login',"");
             setcookie('password',"");
             $message = "C'est bon t'es déconnecté, à bientôt!";
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
         }
-        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
     }
 
     public function forgotAction($request)
@@ -235,21 +235,21 @@ MAIL;
                 {
                     $this->sendMail($login, $mail, $token, "reset");
                     $message = "Tu vas recevoir un email pour réinitialiser ton mot de passe";
-                    return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
                 }
                 else
                 {
                     $message = "Le nom d'utilisateur ou l'email ne sont pas enregistrés";
-                    return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
                 }
             }
         }
         else
         {
             $message = "Tu es déjà connecté ".$_SESSION['user']."!!";
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
         }
-        return $this->render('security/recup-password.html.php', ['request' => $request]);
+        return $this->render('security/recup-password.html.php', ['_request' => $request]);
     }
 
     public function resetPasswordAction($request)
@@ -276,15 +276,15 @@ MAIL;
                     $stmt->bindValue(':newPassword', $newPassword);
                     $stmt->execute();
                     $message = "Ton mot de passe à été mis à jour";
-                    return $this->render('security/checkAccount.html.php', ['request' => $request, 'message' => $message]);
+                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => $message]);
                 }
             }
             else
             {
                 $message = "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin";
-                return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
             }
-            return $this->render('security/reset-password.html.php', ['request' => $request]);
+            return $this->render('security/reset-password.html.php', ['_request' => $request]);
         }
     }
 }
