@@ -82,7 +82,7 @@ class Database
                 $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 $this->_db = $db;
             }
-            catch (Exception $error)
+            catch (\Exception $error)
             {
                 die('Erreur : ' . $error->getMessage());
             }
