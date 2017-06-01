@@ -31,7 +31,7 @@ input[type=text], input[type=password], input[type=email]{
 }
 
 /* Extra styles for the cancel button */
-.cancelbtn {
+.cancel-btn {
     position: relative;
     width: auto;
     padding: 10px 18px;
@@ -72,7 +72,7 @@ span.psw {
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
     background-color: rgb(0,0,0); /* Fallback color */
-    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+    background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
     padding-top: 60px;
 }
 
@@ -114,7 +114,7 @@ span.psw {
         display: block;
         float: none;
     }
-    .cancelbtn {
+    .cancel-btn {
         width: 100%;
     }
 }

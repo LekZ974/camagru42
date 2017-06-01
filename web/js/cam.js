@@ -81,6 +81,7 @@ function saveImg() {
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 savedConfirm();
+                addgallery()
             }
         };
         xhr.open("POST", "/save", true);
@@ -90,6 +91,25 @@ function saveImg() {
     else{
         alert('ok');
     }
+}
+
+function addgallery() {
+    var content = document.getElementsByClassName('content')[0];
+
+    console.log(content);
+
+    // document = document.createElement("content");
+    // document.body.appendChild(content);
+
+    var xhr = getXMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            content.innerHTML = this.responseText;
+        }
+    };
+    xhr.open("GET", "/gallery", true);
+    xhr.send();
 }
 
 function savedConfirm(){

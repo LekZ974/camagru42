@@ -21,6 +21,7 @@ return (include __DIR__ . '/parameters.php') + [
             '/forgot'               => ['controller' => 'security', 'action' => 'forgot'],
             '/Camagru'              => ['controller' => 'camagru', 'action'  => 'appCamagru'],
             '/gallery'              => ['controller' => 'camagru', 'action' => 'gallery'],
+            '/user-gallery'         => ['controller' => 'camagru', 'action' => 'userGallery'],
             '/save'                 => ['controller' => 'camagru', 'action' => 'save'],
             '/delete'               => ['controller' => 'camagru', 'action' => 'delete'],
             '/comments'             => ['controller' => 'camagru', 'action' => 'comments'],

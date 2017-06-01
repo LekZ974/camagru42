@@ -14,7 +14,7 @@ p {
 }
 
 header {
-    font-family: "Lato", sans-serif;
+    font-family: Ubuntu, sans-serif;
 }
 
 #footer{
@@ -42,9 +42,9 @@ body {
 }
 
 .image {
-    max-height: 20em;
+    max-height: 50em;
     height: 100%;
-    max-width: 60em;
+    max-width: 50em;
 }
 
 .container {
@@ -105,7 +105,7 @@ body {
     transform: rotate(45deg) translate(-8px, -8px) ;
 }
 
-/*bouton connect*/
+/*bouton deconnect*/
 
 .containerConnect {
     position: fixed;
@@ -114,6 +114,12 @@ body {
     display: inline-block;
     cursor: pointer;
     z-index: 3;
+}
+
+.containerConnect span {
+    position: fixed;
+    right: 0;
+
 }
 
 .b1, .b2 {
@@ -358,7 +364,8 @@ video {
 }
 
 .gallery .column img {
-    max-height: 30em;
+    max-height: 20em;
+    max-width: 30em;
 }
 
 .modal-content .column {
@@ -373,6 +380,20 @@ video {
     padding: 0 8px;
 }
 
+.del-btn {
+    position: absolute;
+}
+
+.del-btn img {
+    width: 2em;
+}
+
+.del-btn img:hover {
+    width: 3em;
+    transition: 0.5s;
+}
+
+
 .column {
     float: left;
     display: flex;
@@ -382,6 +403,7 @@ video {
 
 .column img {
     max-height: 10em;
+    max-width: 10em;
     border-radius: 1em;
 }
 
@@ -523,8 +545,15 @@ img.hover-shadow {
 }
 
 .my-gallery {
+    margin-left: 10%;
     display: flex;
     flex-direction: row;
+    width: 70%;
+    height: 20em;
+}
+
+.my-gallery .row {
+    width: 100%;
 }
 
 /*Tools*/

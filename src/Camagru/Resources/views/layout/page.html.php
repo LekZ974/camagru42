@@ -36,6 +36,7 @@ MENU;
         <div id="buttonConnect" class="containerConnect">
             <div class="b1"></div>
             <div class="b2"></div>
+            <span>Déconnexion</span>
         </div>
     </a>
 MENU;
