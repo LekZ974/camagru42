@@ -172,10 +172,11 @@ class SecurityController extends Base\AbstractController
      */
     protected function rememberMe($condition, $login, $password)
     {
+        $passwordHash = hash('whirlpool', $password);
         if ($condition === 'on')
         {
             setcookie('login', $login, time()+365*24*3600, null, null, false, true);
-            setcookie('password', $password, time()+365*24*3600, null, null, false, true);
+            setcookie('password', $passwordHash, time()+365*24*3600, null, null, false, true);
         }
     }
 
