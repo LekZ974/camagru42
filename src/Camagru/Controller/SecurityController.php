@@ -16,127 +16,22 @@ class SecurityController extends Base\AbstractController
     {
         if (!isset($_SESSION['connect']))
         {
-            if (isset($_POST['login']) && isset($_POST['password']))
+            $signIn = $this->signInAction($request, $_POST['login'], $_POST['password']);
+            if ($signIn['bool'] === true)
             {
-                $login = $_POST['login'];
-                $password = hash('whirlpool', $_POST['password']);
-                if (isset($_POST['rememberMe']))
-                {
-                    setcookie('login', $login, time()+365*24*3600, null, null, false, true);
-                    setcookie('password', $password, time()+365*24*3600, null, null, false, true);
-                }
-                $message = $this->signInAction($login, $password);
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signIn['statement']]);
             }
-//            a trouver une solution pour rediriger vers checkAccount
-            $this->signUpAction($request, $_POST['createLogin'], $_POST['createPassword'], $_POST['mail']);
+            $signUp = $this->signUpAction($request, $_POST['createLogin'], $_POST['createPassword'], $_POST['mail']);
+            if ($signUp['bool'] === true)
+            {
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signUp['statement']]);
+            }
         }
         else
         {
-            $message = "Tu es déjà connecté ".$_SESSION['user']."!!";
-            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $message]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu es déjà connecté ".$_SESSION['user']."!!"]);
         }
         return $this->render('security/login.html.php', ['request' => $request]);
-    }
-
-    /**
-     * @param $login
-     * @param $password
-     * @param $mail
-     * @return string
-     */
-    public function signUpAction($request, $login, $password, $mail)
-    {
-        if (isset($login, $password, $mail))
-        {
-            $mail = htmlspecialchars($_POST['mail']);
-            if($this->getUser($login) === true)
-            {
-                print_r($password);
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "l'identifiant ".$login." existe déjà"]);
-            }
-            if ($this->getEmail($mail) === true)
-            {
-                exit();
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "l'email : ".$mail." existe déjà"]);
-            }
-            $token = md5(microtime(TRUE)*100000);
-            if ($this->createUser($login, $mail, $password, $token) === true)
-            {
-                $this->sendMail($mail, $login, $token, "activate");
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu vas recevoir un mail de confirmation pour finaliser ton inscription"]);
-            }
-            else
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Une erreur s'est produite"]);
-        }
-    }
-
-    protected function getUser($login)
-    {
-        $db = new Database();
-        $stmt = $db->getPDO()->prepare('SELECT login FROM users WHERE login = ?');
-        $stmt->execute([$login]);
-        if ($stmt->fetchColumn() == $login)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    protected function getEmail($email)
-    {
-        $db = new Database();
-        $stmt = $db->getPDO()->prepare('SELECT email FROM users WHERE email = ?');
-        $stmt->execute([$email]);
-        if ($stmt->fetchColumn() == $email)
-        {
-            return true;
-        }
-        return false;
-    }
-
-    protected function createUser($login, $mail, $password, $token)
-    {
-        try {
-            $passwordHash = hash('whirlpool', $password);
-            $db = new Database();
-            $stmt = $db->getPDO()->prepare('INSERT INTO users (login, password, email, token, verified, created) VALUES (:login, :password, :mail, :token, :verified, :created)');
-            $stmt->execute([
-                ':login' => $login,
-                ':password' => $passwordHash,
-                ':mail' => $mail,
-                ':token' => $token,
-                ':verified' => false,
-                ':created' => date('Y-m-d H:i:s'),
-            ]);
-        }
-        catch (\Exception $error)
-        {
-            die('Erreur : ' . $error->getMessage());
-        }
-    }
-
-    /**
-     * @param string $login
-     * @param string $password
-     *
-     * @return string
-     */
-    protected function signInAction($login, $password)
-    {
-        $db = new Database();
-        $stmt = $db->getPDO()->prepare('SELECT login, password, verified FROM users WHERE login = ? and password = ? and verified = ?');
-        $stmt->execute([$login, $password, 1]);
-        if ($stmt->fetchColumn() != null)
-        {
-            $_SESSION['user'] = $login;
-            $_SESSION['connect'] = "connected";
-            return "Bienvenu ".$_SESSION['user']." tu seras redirigé dans un instant. Si ce n'est pas le cas cliques <a href='/'>ici</a>";
-        }
-        else
-        {
-            return "Le nom d'utilisateur ou le mot de passe incorrect / tu n'as pas activé ton compte";
-        }
     }
 
     /**
@@ -149,22 +44,7 @@ class SecurityController extends Base\AbstractController
         $login = $_GET['log'];
         $token = $_GET['key'];
 
-        $message = "lien d'activation non reconnu";
-        if (isset($login) && isset($token))
-        {
-            $db = new Database();
-            $stmt = $db->getPDO()->prepare('UPDATE users SET verified = 1 WHERE token = ? and verified = ?');
-            $stmt->execute([$token, false]);
-            if ($stmt->rowCount() == 0)
-            {
-                $message = "Erreur : ton compte est déjà activé, si ce n'est pas le cas contactes l'administrateur";
-            }
-            else
-            {
-                $message = "ton compte est activé";
-            }
-        }
-        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $message]);
+        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $this->activeUser($login, $token)['statement']]);
     }
 
     /**
@@ -246,6 +126,157 @@ class SecurityController extends Base\AbstractController
         return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin"]);
     }
 
+    /**
+     * @param $request
+     * @param $login
+     * @param $password
+     * @return array
+     */
+    protected function signInAction($request, $login, $password)
+    {
+        if (isset($login, $password))
+        {
+            $this->rememberMe($_POST['rememberMe'], $login, $password);
+            if ($this->getVerifyUser($login, $password) == $login)
+            {
+                $_SESSION['user'] = $login;
+                $_SESSION['connect'] = "connected";
+                return ['_request' => $request, 'bool' => true, 'statement' => "Bienvenu ".$_SESSION['user']." tu seras redirigé dans un instant. Si ce n'est pas le cas cliques <a href='/'>ici</a>"];
+            }
+            else
+            {
+                return ['_request' => $request, 'bool' => true, 'statement' => "Le nom d'utilisateur ou le mot de passe incorrect / tu n'as pas activé ton compte"];
+            }
+        }
+        return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
+    }
+
+    /**
+     * @param $login
+     * @param $password
+     * @return string
+     */
+    protected function getVerifyUser($login, $password)
+    {
+        $passwordHash = hash('whirlpool', $password);
+        $db = new Database();
+        $stmt = $db->getPDO()->prepare('SELECT login, password, verified FROM users WHERE login = ? and password = ? and verified = ?');
+        $stmt->execute([$login, $passwordHash, 1]);
+        return $stmt->fetchColumn();
+    }
+
+    /**
+     * @param $condition
+     * @param $login
+     * @param $password
+     */
+    protected function rememberMe($condition, $login, $password)
+    {
+        if ($condition === 'on')
+        {
+            setcookie('login', $login, time()+365*24*3600, null, null, false, true);
+            setcookie('password', $password, time()+365*24*3600, null, null, false, true);
+        }
+    }
+
+    /**
+     * @param $request
+     * @param $login
+     * @param $password
+     * @param $mail
+     * @return array
+     */
+    protected function signUpAction($request, $login, $password, $mail)
+    {
+        if (isset($login, $password, $mail))
+        {
+            $mail = htmlspecialchars($_POST['mail']);
+            if($this->getUser($login) === true)
+            {
+                return ['_request' => $request, 'bool' => true, 'statement' => "l'identifiant ".$login." existe déjà"];
+            }
+            if ($this->getEmail($mail) === true)
+            {
+                return ['_request' => $request, 'bool' => true, 'statement' => "l'email : ".$mail." existe déjà"];
+            }
+            $token = md5(microtime(TRUE)*100000);
+            if ($this->createUser($login, $mail, $password, $token) === true)
+            {
+                $this->sendMail($mail, $login, $token, "activate");
+                return ['_request' => $request, 'bool' => true, 'statement' => "Tu vas recevoir un mail de confirmation pour finaliser ton inscription"];
+            }
+            else{
+                return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
+            }
+        }
+        return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
+    }
+
+    /**
+     * @param $login
+     * @return bool
+     */
+    protected function getUser($login)
+    {
+        $db = new Database();
+        $stmt = $db->getPDO()->prepare('SELECT login FROM users WHERE login = ?');
+        $stmt->execute([$login]);
+        if ($stmt->fetchColumn() == $login)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $email
+     * @return bool
+     */
+    protected function getEmail($email)
+    {
+        $db = new Database();
+        $stmt = $db->getPDO()->prepare('SELECT email FROM users WHERE email = ?');
+        $stmt->execute([$email]);
+        if ($stmt->fetchColumn() == $email)
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @param $login
+     * @param $mail
+     * @param $password
+     * @param $token
+     * @return bool
+     */
+    protected function createUser($login, $mail, $password, $token)
+    {
+        try {
+            $passwordHash = hash('whirlpool', $password);
+            $db = new Database();
+            $stmt = $db->getPDO()->prepare('INSERT INTO users (login, password, email, token, verified, created) VALUES (:login, :password, :mail, :token, :verified, :created)');
+            $stmt->execute([
+                ':login' => $login,
+                ':password' => $passwordHash,
+                ':mail' => $mail,
+                ':token' => $token,
+                ':verified' => false,
+                ':created' => date('Y-m-d H:i:s'),
+            ]);
+            return true;
+        }
+        catch (\Exception $error)
+        {
+            die('Erreur : ' . $error->getMessage());
+        }
+    }
+
+    /**
+     * @param $login
+     * @param $password
+     */
     protected function updatePassword($login, $password)
     {
         try
@@ -265,6 +296,34 @@ class SecurityController extends Base\AbstractController
     /**
      * @param $login
      * @param $token
+     * @return array
+     */
+    protected function activeUser($login, $token)
+    {
+        if (isset($login, $token))
+        {
+            if ($this->getUserByToken($login, $token) === true)
+            {
+                $db = new Database();
+                $stmt = $db->getPDO()->prepare('UPDATE users SET verified = 1 WHERE login = ? and verified = ?');
+                $stmt->execute([$login, false]);
+                if ($stmt->rowCount() == 0)
+                {
+                    return ['bool' => true, 'statement' => "Erreur : ton compte est déjà activé, si ce n'est pas le cas contactes l'administrateur"];
+                }
+                else
+                {
+                    return ['bool' => true, 'statement' => "ton compte est activé"];
+                }
+            }
+        }
+
+        return ['bool' => false, 'statement' => "lien d'activation non reconnu"];
+    }
+
+    /**
+     * @param $login
+     * @param $token
      * @return bool
      */
     protected function getUserByToken($login, $token)
@@ -272,13 +331,18 @@ class SecurityController extends Base\AbstractController
         $db = new Database();
         $stmt = $db->getPDO()->prepare('SELECT login, token FROM users WHERE login = ? and token = ?');
         $stmt->execute([$login, $token]);
-        if ($stmt->fetchColumn() !== 0)
+        if ($stmt->fetchColumn() === $login)
         {
             return true;
         }
         return false;
     }
 
+    /**
+     * @param $login
+     * @param $mail
+     * @return string
+     */
     protected function getTokenByUserAndMail($login, $mail)
     {
         $db = new Database();
