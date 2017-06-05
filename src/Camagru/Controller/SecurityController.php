@@ -80,7 +80,7 @@ class SecurityController extends Base\AbstractController
                 $token = $this->getTokenByUserAndMail($login, $mail);
                 if (null != $token)
                 {
-                    $this->sendMail($login, $mail, $token, "reset");
+                    $this->sendMailWithToken($login, $mail, $token, "reset");
                     return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu vas recevoir un email pour réinitialiser ton mot de passe"]);
                 }
                 else
@@ -203,7 +203,7 @@ class SecurityController extends Base\AbstractController
             $token = md5(microtime(TRUE)*100000);
             if ($this->createUser($login, $mail, $password, $token) === true)
             {
-                $this->sendMail($mail, $login, $token, "activate");
+                $this->sendMailWithToken($mail, $login, $token, "activate");
                 return ['_request' => $request, 'bool' => true, 'statement' => "Tu vas recevoir un mail de confirmation pour finaliser ton inscription"];
             }
             else{
@@ -372,7 +372,7 @@ class SecurityController extends Base\AbstractController
      * @param string $type
      *
      */
-    protected function sendMail($mail, $login, $token, $type)
+    protected function sendMailWithToken($mail, $login, $token, $type)
     {
         $subject = null;
         $message = null;

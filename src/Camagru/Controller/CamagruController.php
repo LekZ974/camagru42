@@ -525,7 +525,7 @@ class CamagruController extends Base\AbstractController
     protected function sendMail($destinataire, $imageId, $comment, $author)
     {
         $mail = $this->getEmailByUser($destinataire);
-        $subject = $author.' t\'as laissé un commentaire';
+        $subject = $author . ' t\'as laissé un commentaire';
         $message = <<<MAIL
 		<html>
 		<head>
@@ -545,11 +545,23 @@ class CamagruController extends Base\AbstractController
 		</body>
 		</html>
 MAIL;
-        $headers .= 'To: '.$destinataire.' <'.$mail.'>' . "\r\n";
-        $headers .= 'Bcc: anniversaire_verif@example.com' . "\r\n";
-        mail($mail, $subject, $message, $headers);
+        $headers = 'MIME-Version: 1.0' . "\r\n";
+        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
+        $headers .= 'To: ' . $mail . '' . "\r\n";
+        $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
+        $headers .= 'Cc: comment_archive@example.com' . "\r\n";
+        $headers .= 'Bcc: comment_verif@example.com' . "\r\n";
+        if (mail($mail, $subject, $message, $headers)) {
+            print_r("message envoyé" . PHP_EOL);
+        } else {
+            print_r("erreur le message n'a pas été envoyé" . PHP_EOL);
+        }
+        if (mail("ahoareau@student.42.fr", "test", "test")) {
+            print_r("message envoyé test" . PHP_EOL);
+        } else {
+            print_r("erreur le message test n'a pas été envoyé" . PHP_EOL);
+        }
     }
-
     /**
      * @param $pathFile
      * @param $dest
