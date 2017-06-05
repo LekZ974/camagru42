@@ -23,10 +23,13 @@
             if (navigator.mozGetUserMedia) {
                 video.mozSrcObject = stream;
             } else {
+                console.log(navigator);
+
                 var vendorURL = window.URL || window.webkitURL;
                 video.src = vendorURL.createObjectURL(stream);
             }
             video.play();
+
         },
         function(err) {
         }
@@ -42,6 +45,7 @@
             streaming = true;
         }
     }, false);
+
 
     function takepicture() {
         canvas.width = width;
@@ -130,30 +134,6 @@ function savedConfirm(){
     }, 1600);
 }
 
-//Filters effect
-
-var idx = 0;
-var filters = ['grayscale', 'sepia', 'blur', 'brightness',
-    'contrast', 'hue-rotate', 'hue-rotate2',
-    'hue-rotate3', 'saturate', 'invert', ''];
-
-function changeFilter() {
-    var el = document.getElementById('video');
-    var im = document.getElementById('snap');
-    el.className = '';
-    var effect = filters[idx++ % filters.length]; // loop through filters.
-    if (effect && idx != 11) {
-        el.classList.toggle(effect);
-        im.classList.toggle(effect);
-    }
-    else{
-        idx = 0;
-        im.classList.remove('grayscale', 'sepia', 'blur', 'brightness',
-            'contrast', 'hue-rotate', 'hue-rotate2',
-            'hue-rotate3', 'saturate', 'invert');
-    }
-}
-
 var loadFile = function(event) {
     var reader = new FileReader();
     reader.onload = function () {
@@ -163,3 +143,5 @@ var loadFile = function(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 };
+
+document.addEventListener('click', saveCondition);

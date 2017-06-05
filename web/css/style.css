@@ -300,51 +300,6 @@ video {
     border-radius: 1em;
 }
 
-.grayscale {
-    -webkit-filter: grayscale(1);
-}
-
-.sepia {
-    -webkit-filter: sepia(1);
-}
-
-.blur {
-    -webkit-filter: blur(3px);
-}
-
-.brightness {
-    -webkit-filter: brightness(5);
-}
-
-.contrast {
-    -webkit-filter: contrast(5);
-}
-
-.hue-rotate {
-    -webkit-filter: hue-rotate(90deg);
-}
-
-.hue-rotate2 {
-    -webkit-filter: hue-rotate(180deg);
-}
-
-.hue-rotate3 {
-    -webkit-filter: hue-rotate(360deg);
-}
-
-.saturate {
-    -webkit-filter: saturate(10%);
-}
-
-.invert {
-    -webkit-filter: invert(75%);
-}
-
-.none {
-    -webkit-filter: none;
-}
-
-
 /*ALERT BOX*/
 
 #alert-page {

@@ -497,6 +497,7 @@ class CamagruController extends Base\AbstractController
         $db = new Database();
         $stmt = $db->getPDO()->prepare("DELETE FROM pictures WHERE id = ? AND owner = ?");
         $stmt->execute([$photo, $owner]);
+        unlink(__DIR__."/../../../web/".$photo.".png");
 
         return['message' => "ta photo ".$photo."a bien été supprimée tu seras redirigé vers Camagru", 'status' => true];
     }
