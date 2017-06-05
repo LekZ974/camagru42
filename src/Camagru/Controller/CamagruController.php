@@ -20,7 +20,7 @@ class CamagruController extends Base\AbstractController
             $userGallery = $this->getPageUserPictures();
             $modalGallery = $this->getAllUserPictures();
 
-            return $this->render('camagru/appCamagru.html.php', ['_request' => $request, 'gallery' => $userGallery['pictures'], 'modalGallery' => $modalGallery]);
+            return $this->render('camagru/appCamagru.html.php', ['_request' => $request, 'gallery' => $userGallery['pictures'], 'modalGallery' => $modalGallery, 'anchor' => 'user-gallery']);
         }
         else
         {
@@ -42,7 +42,7 @@ class CamagruController extends Base\AbstractController
             }
             $modalGallery = $this->getAllPictures();
 
-            return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $page['pictures'], 'pages' => $page['pages'], 'modalGallery' => $modalGallery, 'index' => $page['index']]);
+            return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $page['pictures'], 'pages' => $page['pages'], 'modalGallery' => $modalGallery, 'index' => $page['index'], 'anchor' => 'gallery']);
         }
         else
         {
@@ -64,7 +64,29 @@ class CamagruController extends Base\AbstractController
             }
             $modalGallery = $this->getAllUserPictures();
 
-            return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row['pictures'], 'pages' => $row['pages'], 'modalGallery' => $modalGallery, 'index' => $row['index']]);
+            return $this->render('camagru/gallery.html.php', ['_request' => $request, 'gallery' => $row['pictures'], 'pages' => $row['pages'], 'modalGallery' => $modalGallery, 'index' => $row['index'], 'anchor' => 'user-gallery']);
+        }
+        else
+        {
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas à être ici!"]);
+        }
+    }
+    /**
+     * @param array $request
+     *
+     * @return Response
+     */
+    public function miniGalleryAction($request)
+    {
+        if (isset($_SESSION['user'], $_SESSION['connect']) && !empty($_SESSION['user'])) {
+            $row = $this->getPageUserPictures();
+            if ($row['pictures'] == null)
+            {
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Pas de photo à afficher!"]);
+            }
+            $modalGallery = $this->getAllUserPictures();
+
+            return $this->render('camagru/fragment/_mini-gallery.html.php', ['_request' => $request, 'gallery' => $row['pictures'], 'pages' => $row['pages'], 'modalGallery' => $modalGallery, 'index' => $row['index'], 'anchor' => 'user-gallery']);
         }
         else
         {
@@ -112,7 +134,7 @@ class CamagruController extends Base\AbstractController
             {
                 $state = $this->deletePictureOfOwner($photo, $username);
 
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $state['message']]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $state['message'], 'anchor' => "Camagru"]);
             }
             if (isset($_POST['cancel']))
             {
@@ -212,33 +234,32 @@ class CamagruController extends Base\AbstractController
             $query->execute([$user]);
         }
         else
+        {
             $query = $db->getPDO()->query('SELECT COUNT(*) AS total_pictures FROM pictures');
+        }
         $count = $query->fetch();
         $nbPages = ceil($count['total_pictures'] / $nbPicturesPage);
         $page = $_GET['page'];
-        switch ($page) {
-            case $nbPages == 1:
-                $pageNext = 1;
-                $pagePrev = 1;
-                break;
-            case ($page == 0):
-                $pageNext = 2;
-                $pagePrev = 1;
-                break;
-            case ($page < 1):
-                $pageNext = 2;
-                $pagePrev = 1;
-                break;
-            case ($page == $nbPages):
-                $pageNext = $nbPages;
-                $pagePrev = $nbPages - 1;
-                break;
-            default:
-                $pageNext = $page + 1;
-                $pagePrev = $page - 1;
-                break;
+        if ($nbPages == 1)
+        {
+            $pageNext = 1;
+            $pagePrev = 1;
         }
-
+        elseif ($page == 0 || $page <= 1)
+        {
+            $pageNext = 2;
+            $pagePrev = 1;
+        }
+        elseif ($page == $nbPages)
+        {
+            $pageNext = $nbPages;
+            $pagePrev = $nbPages - 1;
+        }
+        else
+        {
+            $pageNext = $page + 1;
+            $pagePrev = $page - 1;
+        }
         return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => $pageNext, 'pagePrev' => $pagePrev];
     }
 

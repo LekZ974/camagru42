@@ -32,8 +32,8 @@
         $prev = $pages['pagePrev'];
         echo <<<HTML
         <div class="page-navigation">
-            <a href="/gallery?page=$prev" class="prev">Précédente</a>
-            <a href="/gallery?page=$next" class="next">Suivante</a>
+            <a href="/$anchor?page=$prev" class="prev">Précédente</a>
+            <a href="/$anchor?page=$next" class="next">Suivante</a>
         </div>
 HTML;
         ?>

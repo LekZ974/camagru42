@@ -29,6 +29,7 @@ MENU;
         <span id="targetSpanId">$user</span>
         <a href="/">Accueil</a>
         <a href="/Camagru">Camagru</a>
+        <a href="/user-gallery">Mes snaps</a>
         <a href="/gallery">Galerie</a>
         <a href="/logout">Déconnexion</a>
     </div>

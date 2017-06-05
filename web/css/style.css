@@ -19,7 +19,8 @@ header {
 
 #footer{
     position: fixed;
-    bottom: 0.5em;
+    padding: 0.5em;
+    bottom: 0em;
     background-color: #d8861c;
     width: 100%;
     text-align: right;
@@ -39,6 +40,13 @@ body {
     top: 5%;
     width: 75%;
     height: 90%;
+}
+
+.content .home {
+    margin-top: 25%;
+    height: 100%;
+    text-align: center;
+    transform: translate(-10%);
 }
 
 .image {
@@ -539,6 +547,13 @@ img.hover-shadow {
 }
 
 .comments {
+    position: relative;
+    flex-direction: column;
+    padding-bottom: 2.5em;
+}
+
+.comment {
+    position: relative;
     border-bottom-style: solid;
     border-color: #d8861c;
     text-align: left;

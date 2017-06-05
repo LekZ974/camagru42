@@ -29,7 +29,6 @@
             video.play();
         },
         function(err) {
-            console.log("An error occured! " + err);
         }
     );
 
@@ -96,20 +95,27 @@ function saveImg() {
 function addgallery() {
     var content = document.getElementsByClassName('content')[0];
 
-    console.log(content);
+    var gallery = document.getElementById('mini-gallery');
+    var camagru = document.getElementById('camagru');
 
-    // document = document.createElement("content");
-    // document.body.appendChild(content);
+    content.removeChild(gallery);
+
+    gallery = document.createElement("div");
+    gallery.setAttribute("id", "mini-gallery");
+    gallery.setAttribute("class", "my-gallery");
+
+    content.appendChild(gallery);
 
     var xhr = getXMLHttpRequest();
 
     xhr.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
-            content.innerHTML = this.responseText;
+            gallery.innerHTML = this.responseText;
         }
     };
-    xhr.open("GET", "/gallery", true);
+    xhr.open("GET", "/mini-gallery", true);
     xhr.send();
+    camagru.parentNode.insertBefore(gallery,camagru.parentNode.firstChild)
 }
 
 function savedConfirm(){
@@ -139,7 +145,6 @@ function changeFilter() {
     if (effect && idx != 11) {
         el.classList.toggle(effect);
         im.classList.toggle(effect);
-        console.log(idx);
     }
     else{
         idx = 0;
