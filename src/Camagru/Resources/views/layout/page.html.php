@@ -1,6 +1,7 @@
 <!--enlever path / quand a lexterieur de lecole-->
 <html>
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/form.css" />
 </head>

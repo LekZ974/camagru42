@@ -377,7 +377,7 @@ class SecurityController extends Base\AbstractController
         $subject = null;
         $message = null;
         $headers = null;
-        $queryString = 'log='.urlencode($login).'&key'.urlencode($token);
+        $queryString = 'log='.urlencode($login).'&key='.urlencode($token);
         if ($type == "activate")
         {
             $subject = 'Activation de ton compte Camagru';

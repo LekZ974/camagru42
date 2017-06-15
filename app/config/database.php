@@ -4,5 +4,6 @@ include __DIR__ . '/parameters.php';
 $DB_DSN = 'sqlite:'.__DIR__.'/db_camagru.db';
 
 define('DB_DSN', $DB_DSN);
-define('DB_USER', 'root');
-define('DB_PASSWORD', 'root');
+$DB_USER = 'root';
+$DB_PASSWORD = 'root';
+$DB_TAB_U = "INSERT INTO users (login, email, password, token, verified, created) VALUES ('Lekz', 'lekz@hotmail.fr', '74dfc2b27acfa364da55f93a5caee29ccad3557247eda238831b3e9bd931b01d77fe994e4f12b9d4cfa92a124461d2065197d8cf7f33fc88566da2db2a4d6eae', 'toto', '1', '".date('Y-m-d')."')";
