@@ -57,4 +57,3 @@ try{
     echo "Impossible d'accéder à la base de données SQLite : ".$e->getMessage();
     die();
 }
-?>

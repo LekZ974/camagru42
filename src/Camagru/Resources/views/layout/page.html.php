@@ -13,7 +13,7 @@
     </div>
     <?php
     $user = $_SESSION['user'];
-    if (!$_SESSION['connect'])
+    if (!isset($_SESSION['connect']) && empty($_SESSION['connect']))
     {
         echo <<<MENU
     <div id="menu" class="sidenav">

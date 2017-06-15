@@ -547,32 +547,30 @@ class CamagruController extends Base\AbstractController
     protected function sendMail($destinataire, $imageId, $comment, $author)
     {
         $mail = $this->getEmailByUser($destinataire);
+        if (!preg_match("#^[a-z0-9._-]+@(hotmail|live|msn).[a-z]{2,4}$#", $mail)) // On filtre les serveurs qui présentent des bogues.
+        {
+            $passage_ligne = "\r\n";
+        }
+        else
+        {
+            $passage_ligne = "\n";
+        }
         $subject = $author . ' t\'as laissé un commentaire';
-        $message = <<<MAIL
-		<html>
-		<head>
-		<title>Va voir vite</title>
-		</head>
-		<body>
-			<p>Bonjour $destinataire,</p>
-			<br />
-			<p>$author t'as laissé un commentaire sur l'une de tes photos Camagru.</p>
-			<br />
-			<p>$comment</p>
-			<br />
-			<p>Vas jeter un oeil <a href="http://localhost:8080/comments?id=$imageId">ici</a>!</p>
-			<br />
-			<p>---------------</p>
-			<p>C'est un mail automatique, Merci de ne pas y répondre.</p>
-		</body>
-		</html>
-MAIL;
-        $headers = 'MIME-Version: 1.0' . "\r\n";
-        $headers .= 'Content-type: text/html; charset=iso-8859-1' . "\r\n";
-        $headers .= 'To: ' . $mail . '' . "\r\n";
-        $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
-        $headers .= 'Cc: comment_archive@example.com' . "\r\n";
-        $headers .= 'Bcc: comment_verif@example.com' . "\r\n";
+        $message= "Content-Transfer-Encoding: 8bit".$passage_ligne;
+        $message.= "<html><head><title>Va voir vite</title></head>";
+        $message.= "<body><p>Bonjour ".$destinataire.",</p><br />";
+        $message.="<p>".$author." t'as laissé un commentaire sur l'une de tes photos Camagru.</p><br />";
+		$message.="<p>".$comment."</p><br />";
+		$message.="<p>Vas jeter un oeil <a href='http://localhost:8080/comments?id=".$imageId."'>ici</a>!</p><br />";
+        $message.="<p>--------</p><p>C'est un mail automatique, Merci de ne pas y répondre.</p></body></html>";
+        $headers = 'MIME-Version: 1.0'.$passage_ligne;
+        $headers .= 'Content-type: text/html; charset=iso-8859-1'.$passage_ligne;
+        $headers .= 'To: ' . $mail . ''.$passage_ligne;
+        $headers .= 'From: ahoareau@student.42.fr'.$passage_ligne;
+        $headers .= 'Cc: comment_archive@example.com'.$passage_ligne;
+        $headers .= 'Bcc: comment_verif@example.com'.$passage_ligne;
+        print_r($message);
+        print_r($mail);
         if (mail($mail, $subject, $message, $headers)) {
             print_r("message envoyé" . PHP_EOL);
         } else {
