@@ -46,6 +46,12 @@ try{
     if ($pdo)
     {
         $pdo->query($DB_TAB_U);
+        $dir = scandir(__DIR__.'/../../web');
+        foreach ($dir as $elem)
+        {
+            if (preg_match('/\.png$/', $elem))
+                unlink(__DIR__.'/../../web/'.$elem);
+        }
         echo "Database : ".$DB_NAME." created".PHP_EOL;
     }
     else

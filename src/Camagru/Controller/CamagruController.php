@@ -569,18 +569,7 @@ class CamagruController extends Base\AbstractController
         $headers .= 'From: ahoareau@student.42.fr'.$passage_ligne;
         $headers .= 'Cc: comment_archive@example.com'.$passage_ligne;
         $headers .= 'Bcc: comment_verif@example.com'.$passage_ligne;
-        print_r($message);
-        print_r($mail);
-        if (mail($mail, $subject, $message, $headers)) {
-            print_r("message envoyé" . PHP_EOL);
-        } else {
-            print_r("erreur le message n'a pas été envoyé" . PHP_EOL);
-        }
-        if (mail("ahoareau@student.42.fr", "test", "test")) {
-            print_r("message envoyé test" . PHP_EOL);
-        } else {
-            print_r("erreur le message test n'a pas été envoyé" . PHP_EOL);
-        }
+        mail($mail, $subject, $message, $headers);
     }
     /**
      * @param $pathFile
