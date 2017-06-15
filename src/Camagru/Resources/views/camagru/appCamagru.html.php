@@ -5,12 +5,10 @@ $layout = 'layout/page.html.php';
 ?>
 <html>
 <body>
-<div class="my-gallery">
-    <p>Tes derniers snap :</p>
-    <?php include __DIR__."/fragment/_pictures.html.php" ?>
-    <?php include __DIR__."/fragment/_modales.html.php" ?>
+<div class="my-gallery" id="mini-gallery">
+<?php include __DIR__."/fragment/_mini-gallery.html.php" ?>
 </div>
-<div class="camagru">
+<div class="camagru" id="camagru">
     <?php include __DIR__."/fragment/_tools.html.php" ?>
     <?php include __DIR__."/fragment/_photo.html.php" ?>
 </div>

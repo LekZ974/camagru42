@@ -10,7 +10,7 @@ class Database
     private $_DB_USER;
     private $_DB_PASSWORD;
     private $_db;
-//A faire plus propre!!
+
     /**
      * Database constructor.
      */

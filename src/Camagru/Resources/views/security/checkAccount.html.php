@@ -1,6 +1,6 @@
 <?php
     $layout = 'layout/page.html.php';
-    header('Refresh:2; url=/');
+    header('Refresh:2; url=/'.$anchor);
 ?>
 
 <html>

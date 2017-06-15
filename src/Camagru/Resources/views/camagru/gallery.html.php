@@ -12,7 +12,7 @@ $layout = 'layout/page.html.php';
     echo 'Page : ';
     for ($i = 1 ; $i <= $pages['nbPages'] ; $i++)
     {
-        echo '<a href="/gallery?page=' . $i . '">' . $i . '</a> ';
+        echo '<a href="/'.$anchor.'?page='.$i.'">'.$i.'</a> ';
     }
     ?>
 </div>
