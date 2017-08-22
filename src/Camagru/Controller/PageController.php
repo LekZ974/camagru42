@@ -13,6 +13,9 @@ class PageController extends Base\AbstractController
      */
     public function homeAction($request)
     {
+        date_default_timezone_set('Europe/Paris');
+        if (empty($_SESSION['user']))
+            $_SESSION['user'] = null;
         return $this->render('page/home.html.php', ['_request' => $request]);
     }
     /**

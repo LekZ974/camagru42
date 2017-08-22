@@ -19,17 +19,17 @@ class SecurityController extends Base\AbstractController
             $signIn = $this->signInAction($request, $_POST['login'], $_POST['password']);
             if ($signIn['bool'] === true)
             {
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signIn['statement']]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signIn['statement'], 'anchor' => 'Camagru']);
             }
             $signUp = $this->signUpAction($request, $_POST['createLogin'], $_POST['createPassword'], $_POST['mail']);
             if ($signUp['bool'] === true)
             {
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signUp['statement']]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => $signUp['statement'], 'anchor' => null]);
             }
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu es déjà connecté ".$_SESSION['user']."!!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu es déjà connecté ".$_SESSION['user']."!!", 'anchor' => null]);
         }
         return $this->render('security/login.html.php', ['request' => $request]);
     }
@@ -44,7 +44,7 @@ class SecurityController extends Base\AbstractController
         $login = $_GET['log'];
         $token = $_GET['key'];
 
-        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $this->activeUser($login, $token)['statement']]);
+        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => $this->activeUser($login, $token)['statement'], 'anchor' => null]);
     }
 
     /**
@@ -60,9 +60,9 @@ class SecurityController extends Base\AbstractController
             session_destroy();
             setcookie('login',"");
             setcookie('password',"");
-            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "C'est bon t'es déconnecté, à bientôt!"]);
+            return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "C'est bon t'es déconnecté, à bientôt!", 'anchor' => null]);
         }
-        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Connectes toi avant de te déconnecter!"]);
+        return $this->render('security/checkAccount.html.php', ['request' => $request, 'statement' => "Connectes toi avant de te déconnecter!", 'anchor' => null]);
     }
 
     /**
@@ -77,22 +77,23 @@ class SecurityController extends Base\AbstractController
         {
             if (isset($login, $mail))
             {
-                $token = $this->getTokenByUserAndMail($login, $mail);
-                if (null != $token)
+                if ($this->secureInput($login) === true && $this->secureInput($mail) === true)
                 {
-                    $this->sendMailWithToken($login, $mail, $token, "reset");
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu vas recevoir un email pour réinitialiser ton mot de passe"]);
+                    $token = $this->getTokenByUserAndMail($login, $mail);
+                    if (null != $token) {
+                        $this->sendMailWithToken($mail, $login, $token, "reset");
+                        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu vas recevoir un email pour réinitialiser ton mot de passe", 'anchor' => null]);
+                    } else {
+                        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Ton email ou ton login est incorrect", 'anchor' => 'forgot']);
+                    }
                 }
-                else
-                {
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Ton email ou ton login est incorrect"]);
-                }
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "les caractères < > \" ' / et \ sont interdit", 'anchor' => 'forgot']);
             }
             return $this->render('security/recup-password.html.php', ['_request' => $request]);
         }
         else
         {
-            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu es déjà connecté ".$_SESSION['user']."!!"]);
+            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu es déjà connecté ".$_SESSION['user']."!!", 'anchor' => null]);
         }
     }
 
@@ -104,26 +105,30 @@ class SecurityController extends Base\AbstractController
     {
         $login = $_GET['log'];
         $token = $_GET['key'];
-        if (isset($login, $token) && $this->isUser($login) === true && $_SESSION['connect'] === 'connected')
+        if (isset($login, $token))
         {
-            if ($this->getUserByToken($login, $token))
+            if ($this->getUserByToken($login, $token) == true)
             {
                 $newPassword = $_POST['newPassword'];
                 $confirmPassword = $_POST['confirmPassword'];
-                if (isset($newPassword, $confirmPassword) && $newPassword == $confirmPassword)
-                {
-                    $this->updatePassword($login, $newPassword);
+                    if (isset($newPassword, $confirmPassword) && $newPassword == $confirmPassword)
+                    {
+                        if ($this->secureInput($newPassword) === true && $this->secureInput($confirmPassword) === true)
+                        {
+                            $this->updatePassword($login, $newPassword);
 
-                    return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => "Ton mot de passe à été mis à jour"]);
-                }
+                            return $this->render('security/checkAccount.html.php', ['_request' => $request, 'message' => "Ton mot de passe à été mis à jour", 'anchor' => null]);
+                        }
+                        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "les caractères < > \" ' / et \ sont interdit", 'anchor' => 'reset?log='.$login.'&key='.$token]);
+                    }
             }
             else
             {
-                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin"]);
+                return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin", 'anchor' => null]);
             }
             return $this->render('security/reset-password.html.php', ['_request' => $request]);
         }
-        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin"]);
+        return $this->render('security/checkAccount.html.php', ['_request' => $request, 'statement' => "Tu n'as pas le droit d'être ici!! Contactes un admin si besoin", 'anchor' => null]);
     }
 
     /**
@@ -136,17 +141,18 @@ class SecurityController extends Base\AbstractController
     {
         if (isset($login, $password))
         {
-            $this->rememberMe($_POST['rememberMe'], $login, $password);
-            if ($this->getVerifyUser($login, $password) == $login)
+            if ($this->secureInput($login) === true && $this->secureInput($password) === true)
             {
-                $_SESSION['user'] = $login;
-                $_SESSION['connect'] = "connected";
-                return ['_request' => $request, 'bool' => true, 'statement' => "Bienvenu ".$_SESSION['user']." tu seras redirigé dans un instant. Si ce n'est pas le cas cliques <a href='/'>ici</a>"];
+                $this->rememberMe($_POST['rememberMe'], $login, $password);
+                if ($this->getVerifyUser($login, $password) == $login) {
+                    $_SESSION['user'] = $login;
+                    $_SESSION['connect'] = "connected";
+                    return ['_request' => $request, 'bool' => true, 'statement' => "Bienvenu " . $_SESSION['user'] . " tu seras redirigé dans un instant. Si ce n'est pas le cas cliques <a href='/'>ici</a>"];
+                } else {
+                    return ['_request' => $request, 'bool' => true, 'statement' => "Le nom d'utilisateur ou le mot de passe incorrect / tu n'as pas activé ton compte"];
+                }
             }
-            else
-            {
-                return ['_request' => $request, 'bool' => true, 'statement' => "Le nom d'utilisateur ou le mot de passe incorrect / tu n'as pas activé ton compte"];
-            }
+            return ['_request' => $request, 'bool' => true, 'statement' => "les caractères < > \" ' / et \ sont interdit"];
         }
         return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
     }
@@ -191,24 +197,24 @@ class SecurityController extends Base\AbstractController
     {
         if (isset($login, $password, $mail))
         {
-            $mail = htmlspecialchars($_POST['mail']);
-            if($this->getUser($login) === true)
+            if ($this->secureInput($login) === true && $this->secureInput($password) === true)
             {
-                return ['_request' => $request, 'bool' => true, 'statement' => "l'identifiant ".$login." existe déjà"];
+                $mail = htmlspecialchars($_POST['mail']);
+                if ($this->getUser($login) === true) {
+                    return ['_request' => $request, 'bool' => true, 'statement' => "l'identifiant " . $login . " existe déjà"];
+                }
+                if ($this->getEmail($mail) === true) {
+                    return ['_request' => $request, 'bool' => true, 'statement' => "l'email : " . $mail . " existe déjà"];
+                }
+                $token = md5(microtime(TRUE) * 100000);
+                if ($this->createUser($login, $mail, $password, $token) === true) {
+                    $this->sendMailWithToken($mail, $login, $token, "activate");
+                    return ['_request' => $request, 'bool' => true, 'statement' => "Tu vas recevoir un mail de confirmation pour finaliser ton inscription"];
+                } else {
+                    return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
+                }
             }
-            if ($this->getEmail($mail) === true)
-            {
-                return ['_request' => $request, 'bool' => true, 'statement' => "l'email : ".$mail." existe déjà"];
-            }
-            $token = md5(microtime(TRUE)*100000);
-            if ($this->createUser($login, $mail, $password, $token) === true)
-            {
-                $this->sendMailWithToken($mail, $login, $token, "activate");
-                return ['_request' => $request, 'bool' => true, 'statement' => "Tu vas recevoir un mail de confirmation pour finaliser ton inscription"];
-            }
-            else{
-                return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
-            }
+            return ['_request' => $request, 'bool' => true, 'statement' => "les caractères < > \" ' / et \ sont interdit"];
         }
         return ['_request' => $request, 'bool' => false, 'statement' => "Une erreur s'est produite"];
     }
@@ -412,7 +418,7 @@ MAIL;
 			<p>Bonjour $login,</p>
 			<br />
 			<p>Quelqu’un a récemment demandé à réinitialiser ton mot de passe Camagru.</p>
-			<a href="http://localhost:8080/Camagru/reset?$queryString">Cliques ici pour changer ton mot de passe.</a>
+			<a href="http://localhost:8080/reset?$queryString">Cliques ici pour changer ton mot de passe.</a>
 			<br />
 			<p>---------------</p>
 			<p>C'est un mail automatique, Merci de ne pas y répondre.</p>
@@ -424,5 +430,14 @@ MAIL;
             $headers .= 'From: ahoareau@student.42.fr' . "\r\n";
         }
         mail($mail, $subject, $message, $headers);
+    }
+
+    protected function secureInput($str)
+    {
+        if (preg_match("#[<>/'\\\"]#", $str) === 1)
+        {
+            return false;
+        }
+        return true;
     }
 }
