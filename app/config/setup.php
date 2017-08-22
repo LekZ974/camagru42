@@ -1,6 +1,8 @@
 <?php
 include __DIR__.'/database.php';
 
+date_default_timezone_set('Europe/Paris');
+
 try{
     echo '- START -'.PHP_EOL;
     print_r("user=".$DB_USER.PHP_EOL);

@@ -240,27 +240,24 @@ class CamagruController extends Base\AbstractController
         $count = $query->fetch();
         $nbPages = ceil($count['total_pictures'] / $nbPicturesPage);
         $page = $_GET['page'];
-        if ($nbPages == 1)
-        {
-            $pageNext = 1;
-            $pagePrev = 1;
+        if (isset($page) && !empty($page)) {
+            if ($nbPages == 1) {
+                $pageNext = 1;
+                $pagePrev = 1;
+            } elseif ($page == 0 || $page <= 1) {
+                $pageNext = 2;
+                $pagePrev = 1;
+            } elseif ($page == $nbPages) {
+                $pageNext = $nbPages;
+                $pagePrev = $nbPages - 1;
+            } else {
+                $pageNext = $page + 1;
+                $pagePrev = $page - 1;
+            }
+            return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => $pageNext, 'pagePrev' => $pagePrev];
         }
-        elseif ($page == 0 || $page <= 1)
-        {
-            $pageNext = 2;
-            $pagePrev = 1;
-        }
-        elseif ($page == $nbPages)
-        {
-            $pageNext = $nbPages;
-            $pagePrev = $nbPages - 1;
-        }
-        else
-        {
-            $pageNext = $page + 1;
-            $pagePrev = $page - 1;
-        }
-        return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => $pageNext, 'pagePrev' => $pagePrev];
+        $page = null;
+        return ['nbPages' => $nbPages, 'nbPicturesPages' => $nbPicturesPage, 'pageNext' => null, 'pagePrev' => null];
     }
 
     /**
