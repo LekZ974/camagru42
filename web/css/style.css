@@ -19,7 +19,8 @@ header {
 
 #footer{
     position: fixed;
-    bottom: 0.5em;
+    padding: 0.5em;
+    bottom: 0em;
     background-color: #d8861c;
     width: 100%;
     text-align: right;
@@ -39,6 +40,13 @@ body {
     top: 5%;
     width: 75%;
     height: 90%;
+}
+
+.content .home {
+    margin-top: 25%;
+    height: 100%;
+    text-align: center;
+    transform: translate(-10%);
 }
 
 .image {
@@ -292,51 +300,6 @@ video {
     border-radius: 1em;
 }
 
-.grayscale {
-    -webkit-filter: grayscale(1);
-}
-
-.sepia {
-    -webkit-filter: sepia(1);
-}
-
-.blur {
-    -webkit-filter: blur(3px);
-}
-
-.brightness {
-    -webkit-filter: brightness(5);
-}
-
-.contrast {
-    -webkit-filter: contrast(5);
-}
-
-.hue-rotate {
-    -webkit-filter: hue-rotate(90deg);
-}
-
-.hue-rotate2 {
-    -webkit-filter: hue-rotate(180deg);
-}
-
-.hue-rotate3 {
-    -webkit-filter: hue-rotate(360deg);
-}
-
-.saturate {
-    -webkit-filter: saturate(10%);
-}
-
-.invert {
-    -webkit-filter: invert(75%);
-}
-
-.none {
-    -webkit-filter: none;
-}
-
-
 /*ALERT BOX*/
 
 #alert-page {
@@ -539,6 +502,13 @@ img.hover-shadow {
 }
 
 .comments {
+    position: relative;
+    flex-direction: column;
+    padding-bottom: 2.5em;
+}
+
+.comment {
+    position: relative;
     border-bottom-style: solid;
     border-color: #d8861c;
     text-align: left;

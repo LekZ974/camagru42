@@ -1,6 +1,7 @@
 <!--enlever path / quand a lexterieur de lecole-->
 <html>
 <head>
+    <meta charset="UTF-8">
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/form.css" />
 </head>
@@ -13,7 +14,7 @@
     </div>
     <?php
     $user = $_SESSION['user'];
-    if (!$_SESSION['connect'])
+    if (!isset($_SESSION['connect']) && empty($_SESSION['connect']))
     {
         echo <<<MENU
     <div id="menu" class="sidenav">
@@ -29,6 +30,7 @@ MENU;
         <span id="targetSpanId">$user</span>
         <a href="/">Accueil</a>
         <a href="/Camagru">Camagru</a>
+        <a href="/user-gallery">Mes snaps</a>
         <a href="/gallery">Galerie</a>
         <a href="/logout">Déconnexion</a>
     </div>

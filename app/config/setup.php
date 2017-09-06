@@ -1,6 +1,8 @@
 <?php
 include __DIR__.'/database.php';
 
+date_default_timezone_set('Europe/Paris');
+
 try{
     echo '- START -'.PHP_EOL;
     print_r("user=".$DB_USER.PHP_EOL);
@@ -46,6 +48,12 @@ try{
     if ($pdo)
     {
         $pdo->query($DB_TAB_U);
+        $dir = scandir(__DIR__.'/../../web');
+        foreach ($dir as $elem)
+        {
+            if (preg_match('/\.png$/', $elem))
+                unlink(__DIR__.'/../../web/'.$elem);
+        }
         echo "Database : ".$DB_NAME." created".PHP_EOL;
     }
     else
@@ -57,4 +65,3 @@ try{
     echo "Impossible d'accéder à la base de données SQLite : ".$e->getMessage();
     die();
 }
-?>
