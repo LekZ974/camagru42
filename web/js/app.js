@@ -15,7 +15,7 @@ function setImage(elem) {
     else
     {
         document.getElementById('filterSelect').style.display = "inline-block";
-        document.getElementById('filterSelect').src="image/"+name;
+        document.getElementById('filterSelect').src="image/filter/"+name;
         document.getElementById('filterSelect').alt=name;
     }
 

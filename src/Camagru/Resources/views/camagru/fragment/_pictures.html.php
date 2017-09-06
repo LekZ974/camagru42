@@ -1,10 +1,18 @@
-<div class="row">
+<div id='gallery' class="row">
     <?php
-    $i = 1;
+    $i = $index + 1;
     foreach ($gallery as $image){
-        echo "<div class='column'>
+        if ($image['owner'] == $_SESSION['user']){
+            echo "<div class='column'>
     <img id='picture-gallery' src='".$image['id'].".png' onclick='openModal();currentSlide(".$i++.")' class='hover-shadow'>
-    <a href='/delete?id=".$image['id']."'>X</a>
+    <a href='/delete?id=".$image['id']."' class = del-btn><img src='/image/Button-Delete-icon.png'></a>
   </div>";
-    } ?>
+        }
+        else{
+            echo "<div class='column'>
+    <img id='picture-gallery' src='".$image['id'].".png' onclick='openModal();currentSlide(".$i++.")' class='hover-shadow'>
+  </div>";
+        }
+    }
+    ?>
 </div>

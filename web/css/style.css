@@ -14,12 +14,13 @@ p {
 }
 
 header {
-    font-family: "Lato", sans-serif;
+    font-family: Ubuntu, sans-serif;
 }
 
 #footer{
     position: fixed;
-    bottom: 0.5em;
+    padding: 0.5em;
+    bottom: 0em;
     background-color: #d8861c;
     width: 100%;
     text-align: right;
@@ -34,17 +35,24 @@ body {
     display: flex;
     flex-direction: column;
     position: absolute;
-    left: 20%;
+    left: 16%;
     right: 20%;
     top: 5%;
     width: 75%;
     height: 90%;
 }
 
-.image {
-    max-height: 20em;
+.content .home {
+    margin-top: 25%;
     height: 100%;
-    max-width: 60em;
+    text-align: center;
+    transform: translate(-10%);
+}
+
+.image {
+    max-height: 50em;
+    height: 100%;
+    max-width: 50em;
 }
 
 .container {
@@ -105,7 +113,7 @@ body {
     transform: rotate(45deg) translate(-8px, -8px) ;
 }
 
-/*bouton connect*/
+/*bouton deconnect*/
 
 .containerConnect {
     position: fixed;
@@ -114,6 +122,12 @@ body {
     display: inline-block;
     cursor: pointer;
     z-index: 3;
+}
+
+.containerConnect span {
+    position: fixed;
+    right: 0;
+
 }
 
 .b1, .b2 {
@@ -240,7 +254,7 @@ button:hover span:after {
     display: inline-block;
     margin-top: inherit;
     position: relative;
-    width: 100%;
+    width: 30em;
 }
 
 .photo-action {
@@ -250,12 +264,20 @@ button:hover span:after {
 .photomaton{
     position: relative;
     float: right;
+    top: 15px;
 }
 
 .photomaton #snap {
+    position: absolute;
     display: none;
     height: 20em;
     width: 20em;
+}
+
+.photomaton #cadre {
+    position: fixed;
+    width: 23em;
+    margin: -24px;
 }
 
 .photomaton #filterSelect {
@@ -277,51 +299,6 @@ video {
     width: 8em;
     border-radius: 1em;
 }
-
-.grayscale {
-    -webkit-filter: grayscale(1);
-}
-
-.sepia {
-    -webkit-filter: sepia(1);
-}
-
-.blur {
-    -webkit-filter: blur(3px);
-}
-
-.brightness {
-    -webkit-filter: brightness(5);
-}
-
-.contrast {
-    -webkit-filter: contrast(5);
-}
-
-.hue-rotate {
-    -webkit-filter: hue-rotate(90deg);
-}
-
-.hue-rotate2 {
-    -webkit-filter: hue-rotate(180deg);
-}
-
-.hue-rotate3 {
-    -webkit-filter: hue-rotate(360deg);
-}
-
-.saturate {
-    -webkit-filter: saturate(10%);
-}
-
-.invert {
-    -webkit-filter: invert(75%);
-}
-
-.none {
-    -webkit-filter: none;
-}
-
 
 /*ALERT BOX*/
 
@@ -350,7 +327,8 @@ video {
 }
 
 .gallery .column img {
-    max-height: 30em;
+    max-height: 20em;
+    max-width: 30em;
 }
 
 .modal-content .column {
@@ -365,6 +343,20 @@ video {
     padding: 0 8px;
 }
 
+.del-btn {
+    position: absolute;
+}
+
+.del-btn img {
+    width: 2em;
+}
+
+.del-btn img:hover {
+    width: 3em;
+    transition: 0.5s;
+}
+
+
 .column {
     float: left;
     display: flex;
@@ -374,6 +366,7 @@ video {
 
 .column img {
     max-height: 10em;
+    max-width: 10em;
     border-radius: 1em;
 }
 
@@ -386,10 +379,9 @@ video {
 /* Modal Content */
 .modal-content {
     position: relative;
-    background-color: #d8861c;
+    background-color: #ffffff;
     margin: auto;
     padding: 0;
-    max-height: 20em;
     max-width: 30em;
 }
 
@@ -423,6 +415,28 @@ video {
     width: auto;
     padding: 16px;
     margin-top: -50px;
+    color: #d8861c;
+    font-weight: bold;
+    font-size: 20px;
+    transition: 0.6s ease;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.page-navigation {
+    position: absolute;
+    width: 100%;
+}
+
+.page-navigation .prev,
+.page-navigation .next {
+    cursor: pointer;
+    position: fixed;
+    width: auto;
+    padding: 16px;
+    margin-top: -50px;
+    margin-right: 35em;
     color: #d8861c;
     font-weight: bold;
     font-size: 20px;
@@ -488,14 +502,28 @@ img.hover-shadow {
 }
 
 .comments {
+    position: relative;
+    flex-direction: column;
+    padding-bottom: 2.5em;
+}
+
+.comment {
+    position: relative;
     border-bottom-style: solid;
     border-color: #d8861c;
     text-align: left;
 }
 
 .my-gallery {
+    margin-left: 10%;
     display: flex;
     flex-direction: row;
+    width: 70%;
+    height: 20em;
+}
+
+.my-gallery .row {
+    width: 100%;
 }
 
 /*Tools*/

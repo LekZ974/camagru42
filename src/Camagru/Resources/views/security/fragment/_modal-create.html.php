@@ -14,7 +14,7 @@
             <button class="login" type="submit" id="createBtn" name="create" id="create"><span>Creer</span></button>
         </div>
         <div class="container" style="background-color:#f1f1f1">
-            <button class="cancelbtn" type="button" onclick="document.getElementById('create').style.display='none'" class="cancelbtn"><span>Cancel</span></button>
+            <button class="cancel-btn" type="button" onclick="document.getElementById('create').style.display='none'" class="cancelbtn"><span>Cancel</span></button>
         </div>
     </form>
 </div>

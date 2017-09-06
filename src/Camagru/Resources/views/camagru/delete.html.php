@@ -9,12 +9,12 @@ $layout = 'layout/page.html.php';
         <span class="alert animate"><?= $statement[0] ?></span>
         <?php
         if ($statement[1] === true){
-            echo "
-            <form method=\"post\">
-            <button type=\"submit\" name=\"valid\">Yes</button>
-            <button type=\"submit\" name=\"cancel\">NO</button>
+            echo <<<FORM
+        <form class= "form animate" method="post">
+            <button class="sucess-btn" type="submit" name="valid">Yes</button>
+            <button class="cancel-btn" type="submit" name="cancel">NO</button>
         </form>
-        ";
+FORM;
         }
             ?>
 

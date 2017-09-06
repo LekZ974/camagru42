@@ -1,14 +1,13 @@
 <?php
 include __DIR__.'/database.php';
 
+date_default_timezone_set('Europe/Paris');
+
 try{
     echo '- START -'.PHP_EOL;
     print_r("user=".$DB_USER.PHP_EOL);
     print_r("password=".$DB_PASSWORD.PHP_EOL);
     print_r("tab=".$DB_TAB_U.PHP_EOL);
-    print_r("tab=".$DB_TAB_PIC.PHP_EOL);
-    print_r("tab=".$DB_TAB_C.PHP_EOL);
-    print_r("tab=".$DB_TAB_C2.PHP_EOL);
     $pdo = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
     $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); // ERRMODE_WARNING | ERRMODE_EXCEPTION | ERRMODE_SILENT
@@ -49,9 +48,12 @@ try{
     if ($pdo)
     {
         $pdo->query($DB_TAB_U);
-        $pdo->query($DB_TAB_PIC);
-        $pdo->query($DB_TAB_C);
-        $pdo->query($DB_TAB_C2);
+        $dir = scandir(__DIR__.'/../../web');
+        foreach ($dir as $elem)
+        {
+            if (preg_match('/\.png$/', $elem))
+                unlink(__DIR__.'/../../web/'.$elem);
+        }
         echo "Database : ".$DB_NAME." created".PHP_EOL;
     }
     else
@@ -63,4 +65,3 @@ try{
     echo "Impossible d'accéder à la base de données SQLite : ".$e->getMessage();
     die();
 }
-?>

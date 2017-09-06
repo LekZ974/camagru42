@@ -23,13 +23,15 @@
             if (navigator.mozGetUserMedia) {
                 video.mozSrcObject = stream;
             } else {
+                console.log(navigator);
+
                 var vendorURL = window.URL || window.webkitURL;
                 video.src = vendorURL.createObjectURL(stream);
             }
             video.play();
+
         },
         function(err) {
-            console.log("An error occured! " + err);
         }
     );
 
@@ -43,6 +45,7 @@
             streaming = true;
         }
     }, false);
+
 
     function takepicture() {
         canvas.width = width;
@@ -81,6 +84,7 @@ function saveImg() {
         xhr.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 savedConfirm();
+                addgallery()
             }
         };
         xhr.open("POST", "/save", true);
@@ -90,6 +94,32 @@ function saveImg() {
     else{
         alert('ok');
     }
+}
+
+function addgallery() {
+    var content = document.getElementsByClassName('content')[0];
+
+    var gallery = document.getElementById('mini-gallery');
+    var camagru = document.getElementById('camagru');
+
+    content.removeChild(gallery);
+
+    gallery = document.createElement("div");
+    gallery.setAttribute("id", "mini-gallery");
+    gallery.setAttribute("class", "my-gallery");
+
+    content.appendChild(gallery);
+
+    var xhr = getXMLHttpRequest();
+
+    xhr.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            gallery.innerHTML = this.responseText;
+        }
+    };
+    xhr.open("GET", "/mini-gallery", true);
+    xhr.send();
+    camagru.parentNode.insertBefore(gallery,camagru.parentNode.firstChild)
 }
 
 function savedConfirm(){
@@ -104,31 +134,6 @@ function savedConfirm(){
     }, 1600);
 }
 
-//Filters effect
-
-var idx = 0;
-var filters = ['grayscale', 'sepia', 'blur', 'brightness',
-    'contrast', 'hue-rotate', 'hue-rotate2',
-    'hue-rotate3', 'saturate', 'invert', ''];
-
-function changeFilter() {
-    var el = document.getElementById('video');
-    var im = document.getElementById('snap');
-    el.className = '';
-    var effect = filters[idx++ % filters.length]; // loop through filters.
-    if (effect && idx != 11) {
-        el.classList.toggle(effect);
-        im.classList.toggle(effect);
-        console.log(idx);
-    }
-    else{
-        idx = 0;
-        im.classList.remove('grayscale', 'sepia', 'blur', 'brightness',
-            'contrast', 'hue-rotate', 'hue-rotate2',
-            'hue-rotate3', 'saturate', 'invert');
-    }
-}
-
 var loadFile = function(event) {
     var reader = new FileReader();
     reader.onload = function () {
@@ -138,3 +143,5 @@ var loadFile = function(event) {
     };
     reader.readAsDataURL(event.target.files[0]);
 };
+
+document.addEventListener('click', saveCondition);
